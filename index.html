@@ -165,6 +165,12 @@
   .kpi-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; }
   @media (max-width:900px){ .kpi-grid{ grid-template-columns: repeat(2,1fr); } }
   .kpi-card{ padding:16px 18px; }
+  .kpi-card-accent{ border:2px solid var(--accent) !important; background:var(--accent-soft); border-radius:10px; padding:12px 14px; }
+  .kpi-card-accent .k{ color: var(--accent-dark) !important; }
+  .kpi-card-accent .v{ font-size:22px !important; font-weight:800 !important; color: var(--accent-dark) !important; }
+  .kpi-card-recycle{ border:2px solid #3E8564 !important; background: var(--fall-soft); }
+  .kpi-card-recycle .k{ color: var(--fall) !important; }
+  .kpi-card-recycle .v{ color: var(--fall) !important; }
   .kpi-card .k{ font-size:12px; color:var(--muted); margin-bottom:8px; }
   .kpi-card .v{ font-size:22px; font-weight:700; }
   .kpi-card .v small{ font-size:12px; font-weight:400; color:var(--muted); margin-left:2px; }
@@ -207,6 +213,9 @@
   .profit-highlight .k{ font-size:13px; font-weight:600; color: var(--accent-dark); }
   .profit-highlight .v{ font-size:26px; font-weight:800; color: var(--accent-dark); }
   .profit-highlight .profit-source{ width:100%; font-size:11px; color: var(--accent-dark); opacity:0.75; }
+  .profit-highlight.recycle-highlight{ background: var(--fall-soft); border-color: rgba(62,133,100,0.3); }
+  .profit-highlight.recycle-highlight .k{ color: var(--fall); }
+  .profit-highlight.recycle-highlight .v{ color: var(--fall); }
   .btn{
     padding:9px 18px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; border:1px solid transparent;
   }
@@ -365,7 +374,7 @@
       <!-- ================= HOME ================= -->
       <section class="page active" id="page-home">
 
-        <div class="section-title"><span data-i18n="homePriceTitle">实时金价</span> <span class="hint"><span data-i18n="homePriceHint">数据来源：东方财富网 · 每 45 秒自动刷新</span> · <span data-i18n="priceDelayNote">（数据延迟，仅作参考）</span></span></div>
+        <div class="section-title"><span data-i18n="homePriceTitle">实时金价</span> <span class="hint"><span data-i18n="homePriceHint">数据来源：东方财富网 · 每 10 秒自动刷新</span> · <span data-i18n="priceDelayNote">（数据延迟，仅作参考）</span></span></div>
         <div class="price-grid" style="grid-template-columns: repeat(2, 1fr);">
           <div class="card price-card">
             <div class="eyebrow"><span data-i18n="cardSgeEyebrow">上海黄金交易所 · Au9999</span><span class="src-tag" id="srcSge">东方财富</span></div>
@@ -432,7 +441,7 @@
               <input type="number" id="pwCtfPrice" data-i18n-ph="phCtfManualPrice" placeholder="请到官网查看后手动填写" step="0.01">
             </div>
             <div class="field">
-              <label data-i18n="fieldEdgePct">价格优势幅度（%，默认1%）</label>
+              <label data-i18n="fieldEdgePctUp">价格上调幅度（%，默认1%）</label>
               <input type="number" id="pwEdgePct" placeholder="1" step="0.1">
             </div>
             <div class="field" style="align-self:flex-end;"><button class="btn btn-primary" id="pwSave" data-i18n="btnSave" style="width:100%;">保存</button></div>
@@ -453,9 +462,9 @@
               <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwCtfRef">周大福香港价格（手动，港元/克）</div>
               <div class="v num" id="pwCtfDisplay" style="font-size:19px;font-weight:700;">--</div>
             </div>
-            <div class="kpi-card" style="border:2px solid var(--accent); border-radius:10px; padding:12px 14px; background:var(--accent-soft);">
-              <div class="k" style="font-size:12px;color:var(--accent-dark);margin-bottom:6px;" data-i18n="pwSuggestedPrice">建议售价（港元/克，整数）</div>
-              <div class="v num" id="pwSuggestDisplay" style="font-size:22px;font-weight:800;color:var(--accent-dark);">--</div>
+            <div class="kpi-card kpi-card-accent">
+              <div class="k" data-i18n="pwSuggestedPrice">建议售价（港元/克，整数）</div>
+              <div class="v num" id="pwSuggestDisplay">--</div>
             </div>
           </div>
 
@@ -465,6 +474,9 @@
 
         <div id="recycleWarnSection">
         <div class="alert-banner-title alert-banner-recycle"><span class="icon">♻️</span><span data-i18n="recycleWarnTitle">回收警示</span><span class="alert-banner-hint" data-i18n="recycleWarnHint">回收价不能高于采购价</span></div>
+        <div class="hint" style="font-size:12px; color:var(--muted); background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 14px; margin-bottom:14px; line-height:1.7;" data-i18n="recycleLogicExplain">
+          规则：① 周大福回收价 <b>更低</b> → 比我们的采购成本安全，直接照周大福的价格回收即可；② 周大福回收价 <b>更高</b> → 跟着回收会亏本，系统会提醒销售人员别照单全收，改按"采购成本 − 下调幅度%"这个更安全的价格回收。
+        </div>
         <div class="card panel">
           <div class="form-grid" style="margin-bottom:14px;">
             <div class="field">
@@ -476,7 +488,7 @@
               <input type="number" id="rwPrice" data-i18n-ph="phRecyclePrice" placeholder="请填写当前回收价格" step="0.01">
             </div>
             <div class="field">
-              <label data-i18n="fieldEdgePct">价格优势幅度（%，默认1%）</label>
+              <label data-i18n="fieldEdgePctDown">价格下调幅度（%，默认1%）</label>
               <input type="number" id="rwEdgePct" placeholder="1" step="0.1">
             </div>
             <div class="field" style="align-self:flex-end;"><button class="btn btn-primary" id="rwSave" data-i18n="btnSave" style="width:100%;">保存</button></div>
@@ -493,9 +505,9 @@
               <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="rwRecycleRef">周大福回收金价（手动，港元/克）</div>
               <div class="v num" id="rwPriceDisplay" style="font-size:19px;font-weight:700;">--</div>
             </div>
-            <div class="kpi-card" style="border:2px solid #3E8564; border-radius:10px; padding:12px 14px; background:var(--fall-soft);">
-              <div class="k" style="font-size:12px;color:var(--fall);margin-bottom:6px;" data-i18n="rwSuggestedPrice">建议回收价（港元/克，整数）</div>
-              <div class="v num" id="rwSuggestDisplay" style="font-size:22px;font-weight:800;color:var(--fall);">--</div>
+            <div class="kpi-card kpi-card-accent kpi-card-recycle">
+              <div class="k" data-i18n="rwSuggestedPrice">建议回收价（港元/克，整数）</div>
+              <div class="v num" id="rwSuggestDisplay">--</div>
             </div>
           </div>
 
@@ -901,7 +913,7 @@
       loginBtn:'登录', loginHintText:'演示默认账号：admin　默认密码：admin123（可在系统管理-员工账号中修改或新增）', logoutBtn:'退出登录',
       accountSectionTitle:'登录账号设置', fieldNewUsername:'账号', fieldNewPassword:'新密码', phKeepCurrent:'留空则不修改',
       alertAccountSaved:'账号设置已保存', alertUsernameRequired:'账号不能为空',
-      homePriceTitle:'实时金价', homePriceHint:'数据来源：东方财富网 · 每 45 秒自动刷新', priceDelayNote:'（数据延迟，仅作参考）',
+      homePriceTitle:'实时金价', homePriceHint:'数据来源：东方财富网 · 每 10 秒自动刷新', priceDelayNote:'（数据延迟，仅作参考）',
       cardSgeEyebrow:'上海黄金交易所 · Au9999', cardSgeTitle:'上交所金价', unitYuanGram:'元/克', updatedAt:'更新时间', convertedHkdLabel:'折合港元/克',
       cardLondonEyebrow:'伦敦金 · 国际金价参考', cardLondonTitle:'伦敦金（换算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金价', cardCtfTitle:'港式品牌金价',
@@ -918,19 +930,19 @@
       pwWarningText:'⚠️ 警告：我们的最低售价 HK$'+'{min}/克 高于周大福香港官网价格 HK$'+'{ctf}/克，定价过高，请留意调整。',
       pwOkText:'✅ 正常：我们的最低售价 HK$'+'{min}/克 不高于周大福香港官网价格 HK$'+'{ctf}/克，符合定价要求。',
       recycleWarnTitle:'回收警示', recycleWarnHint:'回收价不能高于采购价',
+      recycleLogicExplain:'规则：① 周大福回收价 <b>更低</b> → 比我们的采购成本安全，直接照周大福的价格回收即可；② 周大福回收价 <b>更高</b> → 跟着回收会亏本，系统会提醒销售人员别照单全收，改按"采购成本 − 下调幅度%"这个更安全的价格回收。',
       fieldRecyclePrice:'周大福香港官网回收金价（手动填写，港元/克）', phRecyclePrice:'请到官网查看后手动填写',
       rwRecycleRef:'周大福回收金价（手动，港元/克）', rwNeedManualPrice:'请在上方填写周大福香港官网回收金价后保存，才能进行对比。',
-      rwWarningText:'⚠️ 警告：周大福回收价格 HK$'+'{rw}/克 高于我们的采购单价 HK$'+'{cost}/克，若跟进此价格回收将出现亏损，请留意调整。',
+      rwWarningText:'⚠️ 警示：周大福回收价格 HK$'+'{rw}/克 高于我们的最新采购单价 HK$'+'{cost}/克，请销售人员留意，不要直接按周大福价格回收，以免出现亏损。',
       rwOkText:'✅ 正常：周大福回收价格 HK$'+'{rw}/克 不高于我们的采购单价 HK$'+'{cost}/克，跟进该价格回收不会亏损。',
-      fieldEdgePct:'价格优势幅度（%，默认1%）',
+      fieldEdgePctUp:'价格上调幅度（%，默认1%）', fieldEdgePctDown:'价格下调幅度（%，默认1%）',
       pwSuggestedPrice:'建议售价（港元/克，整数）',
       pwSuggestReasonEdge:'周大福价格更高，已按优势幅度 {edge}% 定价为 HK$'+'{price}/克，仍低于周大福，兼顾竞争力与利润。',
       pwSuggestReasonFloor:'周大福价格未超过最低售价，本次未使用价格优势幅度（{edge}%无生效空间），直接按最低售价 HK$'+'{price}/克 执行。',
       pwSuggestReasonEdgeClamped:'按 {edge}% 优势幅度算出的价格低于最低售价，优势幅度超出可让利空间，已改为按最低售价 HK$'+'{price}/克 执行。',
       rwSuggestedPrice:'建议回收价（港元/克，整数）',
-      rwSuggestReasonEdge:'周大福价格更低，已按优势幅度 {edge}% 提高回收价至 HK$'+'{price}/克，仍不超过采购成本，更能吸引卖家。',
-      rwSuggestReasonCeiling:'周大福价格不低于采购单价（或未填写），本次未使用价格优势幅度（{edge}%无生效空间），直接按采购成本上限 HK$'+'{price}/克 执行。',
-      rwSuggestReasonEdgeClamped:'按 {edge}% 优势幅度算出的回收价高于采购成本，优势幅度超出可让利空间，已改为按采购成本上限 HK$'+'{price}/克 执行。',
+      rwSuggestReasonUseCtf:'周大福回收价格低于我们的最新采购单价，安全范围内，建议直接按周大福价格 HK$'+'{price}/克 回收。',
+      rwSuggestReasonReduced:'周大福回收价格已高于我们的最新采购单价，若直接跟进将出现亏损，已按最新采购单价下调 {edge}%，建议回收价 HK$'+'{price}/克。',
       homeKpiTitle:'经营概览', homeKpiHint:'基于本地演示数据计算',
       kpiTodaySales:'今日销售额', unitCnyLabel:'元（RMB）', kpiTodayWeight:'今日销售克重', kpiInvWeight:'库存总克重（估值）', kpiMonthSales:'本月累计销售额',
       homeChartTitle:'销售趋势', homeChartSubtitle:'近 7 日销售趋势（克重）',
@@ -1010,7 +1022,7 @@
       loginBtn:'登入', loginHintText:'示範預設帳號：admin　預設密碼：admin123（可在系統管理-員工帳號中修改或新增）', logoutBtn:'登出',
       accountSectionTitle:'登入帳號設定', fieldNewUsername:'帳號', fieldNewPassword:'新密碼', phKeepCurrent:'留空則不修改',
       alertAccountSaved:'帳號設定已儲存', alertUsernameRequired:'帳號不能為空',
-      homePriceTitle:'即時金價', homePriceHint:'資料來源：東方財富網 · 每 45 秒自動更新', priceDelayNote:'（資料延遲，僅供參考）',
+      homePriceTitle:'即時金價', homePriceHint:'資料來源：東方財富網 · 每 10 秒自動更新', priceDelayNote:'（資料延遲，僅供參考）',
       cardSgeEyebrow:'上海黃金交易所 · Au9999', cardSgeTitle:'上交所金價', unitYuanGram:'元/克', updatedAt:'更新時間', convertedHkdLabel:'折合港元/克',
       cardLondonEyebrow:'倫敦金 · 國際金價參考', cardLondonTitle:'倫敦金（換算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金價', cardCtfTitle:'港式品牌金價',
@@ -1027,19 +1039,19 @@
       pwWarningText:'⚠️ 警告：我們的最低售價 HK$'+'{min}/克 高於周大福香港官網價格 HK$'+'{ctf}/克，定價過高，請留意調整。',
       pwOkText:'✅ 正常：我們的最低售價 HK$'+'{min}/克 不高於周大福香港官網價格 HK$'+'{ctf}/克，符合定價要求。',
       recycleWarnTitle:'回收警示', recycleWarnHint:'回收價不能高於採購價',
+      recycleLogicExplain:'規則：① 周大福回收價 <b>更低</b> → 比我們的採購成本安全，直接照周大福的價格回收即可；② 周大福回收價 <b>更高</b> → 跟著回收會虧本，系統會提醒銷售人員別照單全收，改按「採購成本 − 下調幅度%」這個更安全的價格回收。',
       fieldRecyclePrice:'周大福香港官網回收金價（手動填寫，港元/克）', phRecyclePrice:'請到官網查看後手動填寫',
       rwRecycleRef:'周大福回收金價（手動，港元/克）', rwNeedManualPrice:'請在上方填寫周大福香港官網回收金價後儲存，才能進行比對。',
-      rwWarningText:'⚠️ 警告：周大福回收價格 HK$'+'{rw}/克 高於我們的採購單價 HK$'+'{cost}/克，若跟進此價格回收將出現虧損，請留意調整。',
+      rwWarningText:'⚠️ 警示：周大福回收價格 HK$'+'{rw}/克 高於我們的最新採購單價 HK$'+'{cost}/克，請銷售人員留意，不要直接按周大福價格回收，以免出現虧損。',
       rwOkText:'✅ 正常：周大福回收價格 HK$'+'{rw}/克 不高於我們的採購單價 HK$'+'{cost}/克，跟進該價格回收不會虧損。',
-      fieldEdgePct:'價格優勢幅度（%，預設1%）',
+      fieldEdgePctUp:'價格上調幅度（%，預設1%）', fieldEdgePctDown:'價格下調幅度（%，預設1%）',
       pwSuggestedPrice:'建議售價（港元/克，整數）',
       pwSuggestReasonEdge:'周大福價格更高，已按優勢幅度 {edge}% 定價為 HK$'+'{price}/克，仍低於周大福，兼顧競爭力與利潤。',
       pwSuggestReasonFloor:'周大福價格未超過最低售價，本次未使用價格優勢幅度（{edge}%無生效空間），直接按最低售價 HK$'+'{price}/克 執行。',
       pwSuggestReasonEdgeClamped:'按 {edge}% 優勢幅度算出的價格低於最低售價，優勢幅度超出可讓利空間，已改為按最低售價 HK$'+'{price}/克 執行。',
       rwSuggestedPrice:'建議回收價（港元/克，整數）',
-      rwSuggestReasonEdge:'周大福價格更低，已按優勢幅度 {edge}% 提高回收價至 HK$'+'{price}/克，仍不超過採購成本，更能吸引賣家。',
-      rwSuggestReasonCeiling:'周大福價格不低於採購單價（或未填寫），本次未使用價格優勢幅度（{edge}%無生效空間），直接按採購成本上限 HK$'+'{price}/克 執行。',
-      rwSuggestReasonEdgeClamped:'按 {edge}% 優勢幅度算出的回收價高於採購成本，優勢幅度超出可讓利空間，已改為按採購成本上限 HK$'+'{price}/克 執行。',
+      rwSuggestReasonUseCtf:'周大福回收價格低於我們的最新採購單價，安全範圍內，建議直接按周大福價格 HK$'+'{price}/克 回收。',
+      rwSuggestReasonReduced:'周大福回收價格已高於我們的最新採購單價，若直接跟進將出現虧損，已按最新採購單價下調 {edge}%，建議回收價 HK$'+'{price}/克。',
       homeKpiTitle:'經營概覽', homeKpiHint:'根據本地示範資料計算',
       kpiTodaySales:'今日銷售額', unitCnyLabel:'元（RMB）', kpiTodayWeight:'今日銷售克重', kpiInvWeight:'庫存總克重（估值）', kpiMonthSales:'本月累計銷售額',
       homeChartTitle:'銷售趨勢', homeChartSubtitle:'近 7 日銷售趨勢（克重）',
@@ -1118,7 +1130,7 @@
       loginBtn:'Log in', loginHintText:'Demo default — username: admin, password: admin123 (manage under System \u2192 Staff Accounts)', logoutBtn:'Log out',
       accountSectionTitle:'Login Account', fieldNewUsername:'Username', fieldNewPassword:'New password', phKeepCurrent:'Leave blank to keep unchanged',
       alertAccountSaved:'Account settings saved', alertUsernameRequired:'Username cannot be empty',
-      homePriceTitle:'Live Gold Prices', homePriceHint:'Source: Eastmoney · auto-refresh every 45s', priceDelayNote:'(Delayed data, for reference only)',
+      homePriceTitle:'Live Gold Prices', homePriceHint:'Source: Eastmoney · auto-refresh every 10s', priceDelayNote:'(Delayed data, for reference only)',
       cardSgeEyebrow:'Shanghai Gold Exchange · Au9999', cardSgeTitle:'SGE Price', unitYuanGram:'CNY/g', updatedAt:'Updated', convertedHkdLabel:'Converted HKD/g',
       cardLondonEyebrow:'London Gold · Intl. reference', cardLondonTitle:'London Gold (converted CNY/g)', unitUsdOz:'USD/oz',
       cardCtfEyebrow:'Chow Tai Fook (HK) · Today\u2019s Price', cardCtfTitle:'HK Brand Gold Price',
@@ -1135,19 +1147,19 @@
       pwWarningText:'\u26a0\ufe0f Warning: our minimum selling price HK{min}/g is above Chow Tai Fook HK\u2019s official price HK{ctf}/g \u2014 pricing may be too high, please review.',
       pwOkText:'\u2705 OK: our minimum selling price HK{min}/g is not above Chow Tai Fook HK\u2019s official price HK{ctf}/g.',
       recycleWarnTitle:'Recycle Price Alert', recycleWarnHint:'Buyback price must not exceed our purchase price',
+      recycleLogicExplain:'Rule: \u2460 If Chow Tai Fook\u2019s recycle price is <b>lower</b> \u2014 it\u2019s safely below our cost, so just match their price directly. \u2461 If it\u2019s <b>higher</b> \u2014 matching it would lose money, so the system flags it for sales staff and suggests a safer price instead: \u201cour cost minus the decrease margin%\u201d.',
       fieldRecyclePrice:'Chow Tai Fook HK official recycle price (enter manually, HKD/g)', phRecyclePrice:'Check the official site and enter manually',
       rwRecycleRef:'Chow Tai Fook Recycle Price (manual, HKD/g)', rwNeedManualPrice:'Enter and save Chow Tai Fook HK\u2019s official recycle price above to run the comparison.',
-      rwWarningText:'\u26a0\ufe0f Warning: Chow Tai Fook\u2019s recycle price HK{rw}/g is above our purchase unit price HK{cost}/g \u2014 matching it would put buyback at a loss, please review.',
+      rwWarningText:'\u26a0\ufe0f Alert: Chow Tai Fook\u2019s recycle price HK{rw}/g is above our latest purchase cost HK{cost}/g \u2014 sales staff should not simply match Chow Tai Fook\u2019s price, or buyback will be at a loss.',
       rwOkText:'\u2705 OK: Chow Tai Fook\u2019s recycle price HK{rw}/g is not above our purchase unit price HK{cost}/g \u2014 matching it would not cause a loss.',
-      fieldEdgePct:'Price Edge (%, default 1%)',
+      fieldEdgePctUp:'Price Increase Margin (%, default 1%)', fieldEdgePctDown:'Price Decrease Margin (%, default 1%)',
       pwSuggestedPrice:'Suggested Selling Price (HKD/g, whole number)',
       pwSuggestReasonEdge:'Chow Tai Fook\u2019s price is higher \u2014 priced at HK{price}/g using a {edge}% edge, still below Chow Tai Fook, balancing competitiveness and margin.',
       pwSuggestReasonFloor:'Chow Tai Fook\u2019s price doesn\u2019t exceed our minimum \u2014 the {edge}% edge doesn\u2019t apply here, using the minimum HK{price}/g directly.',
       pwSuggestReasonEdgeClamped:'The price computed with a {edge}% edge would fall below our minimum \u2014 the edge is larger than the available room, so we fall back to the minimum HK{price}/g.',
       rwSuggestedPrice:'Suggested Buyback Price (HKD/g, whole number)',
-      rwSuggestReasonEdge:'Chow Tai Fook\u2019s price is lower \u2014 raised the buyback price to HK{price}/g using a {edge}% edge, still within our purchase cost, more attractive to sellers.',
-      rwSuggestReasonCeiling:'Chow Tai Fook\u2019s price isn\u2019t below our purchase price (or hasn\u2019t been entered) \u2014 the {edge}% edge doesn\u2019t apply here, using the cost ceiling of HK{price}/g directly.',
-      rwSuggestReasonEdgeClamped:'The buyback price computed with a {edge}% edge would exceed our purchase cost \u2014 the edge is larger than the available room, so we cap it at the cost ceiling HK{price}/g.',
+      rwSuggestReasonUseCtf:'Chow Tai Fook\u2019s recycle price is below our latest purchase cost \u2014 safe to match it directly, suggested buyback price HK{price}/g.',
+      rwSuggestReasonReduced:'Chow Tai Fook\u2019s recycle price is above our latest purchase cost \u2014 matching it would cause a loss, so we reduced our cost by {edge}%, suggested buyback price HK{price}/g.',
       homeKpiTitle:'Business Overview', homeKpiHint:'Calculated from local demo data',
       kpiTodaySales:'Today\u2019s Sales', unitCnyLabel:'RMB (CNY)', kpiTodayWeight:'Today\u2019s Sold Weight', kpiInvWeight:'Total Stock Weight (valued)', kpiMonthSales:'Month-to-date Sales',
       homeChartTitle:'Sales Trend', homeChartSubtitle:'Sales weight, last 7 days',
@@ -2281,19 +2293,18 @@
     // Suggested recycle price: outbid Chow Tai Fook's recycle price by edgePct% to
     // attract sellers, whenever their price leaves room below our cost — capped at
     // cost (rounded DOWN so we never suggest paying more than we paid).
+    // Suggested recycle price:
+    // - If Chow Tai Fook's recycle price is below our cost, it's safe to just match their
+    //   price directly (no adjustment) — we're not at risk of a loss.
+    // - If their price is at or above our cost, matching it would lose money, so instead
+    //   suggest our own cost reduced by edgePct% (default 1%) as a safer offer.
     let suggested, reasonKey;
     if (savedPrice < costHkd){
-      const edgePrice = savedPrice * (1 + edgePct/100);
-      if (edgePrice < costHkd){
-        suggested = Math.floor(edgePrice);
-        reasonKey = 'rwSuggestReasonEdge';
-      } else {
-        suggested = Math.floor(costHkd);
-        reasonKey = 'rwSuggestReasonEdgeClamped';
-      }
+      suggested = Math.floor(savedPrice);
+      reasonKey = 'rwSuggestReasonUseCtf';
     } else {
-      suggested = Math.floor(costHkd);
-      reasonKey = 'rwSuggestReasonCeiling';
+      suggested = Math.floor(costHkd * (1 - edgePct/100));
+      reasonKey = 'rwSuggestReasonReduced';
     }
     $('rwSuggestDisplay').textContent = 'HK$' + suggested;
     reasonBox.textContent = t(reasonKey).replace('{edge}', edgePct).replace('{price}', suggested);
@@ -2540,7 +2551,7 @@
   renderRecycleWarning();
   applyLang(currentLang);
   refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); });
-  setInterval(() => { refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); }); }, 45000);
+  setInterval(() => { refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); }); }, 10000);
 
 })();
 </script>
