@@ -508,6 +508,8 @@
             <div class="kpi-card kpi-card-accent kpi-card-recycle">
               <div class="k" data-i18n="rwSuggestedPrice">建议回收价（港元/克，整数）</div>
               <div class="v num" id="rwSuggestDisplay">--</div>
+              <div id="rwSuggestAboveCostNote" style="font-size:11px; font-weight:700; color:var(--rise); margin-top:4px; display:none;" data-i18n="rwSuggestAboveCostNote">该价格高于最新采购单价，请注意</div>
+              <div id="rwSuggestBelowCostNote" style="font-size:11px; font-weight:700; color:var(--rise); margin-top:4px; display:none;" data-i18n="rwSuggestBelowCostNote">该价格低于最新采购单价，请注意</div>
             </div>
           </div>
 
@@ -927,22 +929,22 @@
       pwNoPurchase:'该商品规格目前没有仍有库存的采购批次，无法计算最低售价，请先在采购管理中录入采购单（且需有剩余库存）。',
       pwRateUnavailable:'当前汇率暂时无法获取，无法折算港元，请稍后再试。',
       pwNeedManualPrice:'请在上方填写周大福香港官网今日金价后保存，才能进行对比。',
-      pwWarningText:'⚠️ 警告：我们的最低售价 HK$'+'{min}/克 高于周大福香港官网价格 HK$'+'{ctf}/克，定价过高，请留意调整。',
-      pwOkText:'✅ 正常：我们的最低售价 HK$'+'{min}/克 不高于周大福香港官网价格 HK$'+'{ctf}/克，符合定价要求。',
+      pwWarningText:'⚠️ 警告：按下调幅度算出的建议售价 HK$'+'{ctf}/克 低于我们的最低售价 HK$'+'{min}/克，若照此定价将不足利润要求，请留意调整幅度。',
+      pwOkText:'✅ 正常：建议售价 HK$'+'{ctf}/克 不低于我们的最低售价 HK$'+'{min}/克，符合定价要求。',
       recycleWarnTitle:'回收警示', recycleWarnHint:'回收价不能高于采购价',
-      recycleLogicExplain:'规则：① 周大福回收价 <b>更低</b> → 比我们的采购成本安全，直接照周大福的价格回收即可；② 周大福回收价 <b>更高</b> → 跟着回收会亏本，系统会提醒销售人员别照单全收，改按"采购成本 − 下调幅度%"这个更安全的价格回收。',
+      recycleLogicExplain:'规则：建议回收价 = 周大福回收金价 × (1 + 价格上调幅度%)。如果算出来的建议回收价<b>高于</b>我们的最新采购单价，说明按此价格回收会亏本，系统会发出警报，提醒销售人员留意调整。',
       fieldRecyclePrice:'周大福香港官网回收金价（手动填写，港元/克）', phRecyclePrice:'请到官网查看后手动填写',
       rwRecycleRef:'周大福回收金价（手动，港元/克）', rwNeedManualPrice:'请在上方填写周大福香港官网回收金价后保存，才能进行对比。',
-      rwWarningText:'⚠️ 警示：周大福回收价格 HK$'+'{rw}/克 高于我们的最新采购单价 HK$'+'{cost}/克，请销售人员留意，不要直接按周大福价格回收，以免出现亏损。',
-      rwOkText:'✅ 正常：周大福回收价格 HK$'+'{rw}/克 不高于我们的采购单价 HK$'+'{cost}/克，跟进该价格回收不会亏损。',
-      fieldEdgePctUp:'价格优势幅度（%，默认1%）', fieldEdgePctDown:'价格优势幅度（%，默认1%）',
+      rwWarningText:'⚠️ 警示：按上调幅度算出的建议回收价 HK$'+'{rw}/克 高于我们的最新采购单价 HK$'+'{cost}/克，若照此回收将出现亏损，请销售人员留意调整。',
+      rwOkText:'✅ 正常：建议回收价 HK$'+'{rw}/克 不高于我们的采购单价 HK$'+'{cost}/克，按此价格回收不会亏损。',
+      fieldEdgePctUp:'价格下调幅度（%，默认1%）', fieldEdgePctDown:'价格上调幅度（%，默认1%）',
       pwSuggestedPrice:'建议售价（港元/克，整数）',
-      pwSuggestReasonEdge:'周大福价格更高，已按优势幅度 {edge}% 定价为 HK$'+'{price}/克，仍低于周大福，兼顾竞争力与利润。',
+      pwSuggestReasonEdge:'按周大福价格下调 {edge}% 计算，建议售价 HK$'+'{price}/克，不低于我们的最低售价，符合定价要求。',
       pwSuggestReasonFloor:'周大福价格未超过最低售价，本次未使用价格优势幅度（{edge}%无生效空间），直接按最低售价 HK$'+'{price}/克 执行。',
-      pwSuggestReasonEdgeClamped:'按 {edge}% 优势幅度算出的价格低于最低售价，优势幅度超出可让利空间，已改为按最低售价 HK$'+'{price}/克 执行。',
-      rwSuggestedPrice:'建议回收价（港元/克，整数）',
-      rwSuggestReasonUseCtf:'周大福回收价格低于我们的最新采购单价，安全范围内，建议直接按周大福价格 HK$'+'{price}/克 回收。',
-      rwSuggestReasonReduced:'周大福回收价格已高于我们的最新采购单价，若直接跟进将出现亏损，已按最新采购单价下调 {edge}%，建议回收价 HK$'+'{price}/克。',
+      pwSuggestReasonEdgeClamped:'按周大福价格下调 {edge}% 计算，建议售价 HK$'+'{price}/克，已低于我们的最低售价，若照此定价将不足利润要求，请留意调整降价幅度。',
+      rwSuggestedPrice:'建议回收价（港元/克，整数）', rwSuggestAboveCostNote:'⚠️ 该价格高于最新采购单价，不能高于最新采购单价，请留意调整。', rwSuggestBelowCostNote:'⚠️ 该价格低于最新采购单价，请注意。',
+      rwSuggestReasonWithinSafe:'按周大福回收价格上调 {edge}% 计算，建议回收价 HK$'+'{price}/克，未超过我们的最新采购单价，可安全回收。',
+      rwSuggestReasonAboveSuggested:'按周大福回收价格上调 {edge}% 计算，建议回收价 HK$'+'{price}/克，已高于我们的最新采购单价，若照此回收将出现亏损，请留意调整幅度或核实价格。',
       homeKpiTitle:'经营概览', homeKpiHint:'基于本地演示数据计算',
       kpiTodaySales:'今日销售额', unitCnyLabel:'元（RMB）', kpiTodayWeight:'今日销售克重', kpiInvWeight:'库存总克重（估值）', kpiMonthSales:'本月累计销售额',
       homeChartTitle:'销售趋势', homeChartSubtitle:'近 7 日销售趋势（克重）',
@@ -1036,22 +1038,22 @@
       pwNoPurchase:'該商品規格目前沒有仍有庫存的採購批次，無法計算最低售價，請先在採購管理中錄入採購單（且需有剩餘庫存）。',
       pwRateUnavailable:'目前匯率暫時無法取得，無法折算港元，請稍後再試。',
       pwNeedManualPrice:'請在上方填寫周大福香港官網今日金價後儲存，才能進行比對。',
-      pwWarningText:'⚠️ 警告：我們的最低售價 HK$'+'{min}/克 高於周大福香港官網價格 HK$'+'{ctf}/克，定價過高，請留意調整。',
-      pwOkText:'✅ 正常：我們的最低售價 HK$'+'{min}/克 不高於周大福香港官網價格 HK$'+'{ctf}/克，符合定價要求。',
+      pwWarningText:'⚠️ 警告：按下調幅度算出的建議售價 HK$'+'{ctf}/克 低於我們的最低售價 HK$'+'{min}/克，若照此定價將不足利潤要求，請留意調整幅度。',
+      pwOkText:'✅ 正常：建議售價 HK$'+'{ctf}/克 不低於我們的最低售價 HK$'+'{min}/克，符合定價要求。',
       recycleWarnTitle:'回收警示', recycleWarnHint:'回收價不能高於採購價',
-      recycleLogicExplain:'規則：① 周大福回收價 <b>更低</b> → 比我們的採購成本安全，直接照周大福的價格回收即可；② 周大福回收價 <b>更高</b> → 跟著回收會虧本，系統會提醒銷售人員別照單全收，改按「採購成本 − 下調幅度%」這個更安全的價格回收。',
+      recycleLogicExplain:'規則：建議回收價 = 周大福回收金價 × (1 + 價格上調幅度%)。如果算出來的建議回收價<b>高於</b>我們的最新採購單價，說明按此價格回收會虧本，系統會發出警報，提醒銷售人員留意調整。',
       fieldRecyclePrice:'周大福香港官網回收金價（手動填寫，港元/克）', phRecyclePrice:'請到官網查看後手動填寫',
       rwRecycleRef:'周大福回收金價（手動，港元/克）', rwNeedManualPrice:'請在上方填寫周大福香港官網回收金價後儲存，才能進行比對。',
-      rwWarningText:'⚠️ 警示：周大福回收價格 HK$'+'{rw}/克 高於我們的最新採購單價 HK$'+'{cost}/克，請銷售人員留意，不要直接按周大福價格回收，以免出現虧損。',
-      rwOkText:'✅ 正常：周大福回收價格 HK$'+'{rw}/克 不高於我們的採購單價 HK$'+'{cost}/克，跟進該價格回收不會虧損。',
-      fieldEdgePctUp:'價格優勢幅度（%，預設1%）', fieldEdgePctDown:'價格優勢幅度（%，預設1%）',
+      rwWarningText:'⚠️ 警示：按上調幅度算出的建議回收價 HK$'+'{rw}/克 高於我們的最新採購單價 HK$'+'{cost}/克，若照此回收將出現虧損，請銷售人員留意調整。',
+      rwOkText:'✅ 正常：建議回收價 HK$'+'{rw}/克 不高於我們的採購單價 HK$'+'{cost}/克，按此價格回收不會虧損。',
+      fieldEdgePctUp:'價格下調幅度（%，預設1%）', fieldEdgePctDown:'價格上調幅度（%，預設1%）',
       pwSuggestedPrice:'建議售價（港元/克，整數）',
-      pwSuggestReasonEdge:'周大福價格更高，已按優勢幅度 {edge}% 定價為 HK$'+'{price}/克，仍低於周大福，兼顧競爭力與利潤。',
+      pwSuggestReasonEdge:'按周大福價格下調 {edge}% 計算，建議售價 HK$'+'{price}/克，不低於我們的最低售價，符合定價要求。',
       pwSuggestReasonFloor:'周大福價格未超過最低售價，本次未使用價格優勢幅度（{edge}%無生效空間），直接按最低售價 HK$'+'{price}/克 執行。',
-      pwSuggestReasonEdgeClamped:'按 {edge}% 優勢幅度算出的價格低於最低售價，優勢幅度超出可讓利空間，已改為按最低售價 HK$'+'{price}/克 執行。',
-      rwSuggestedPrice:'建議回收價（港元/克，整數）',
-      rwSuggestReasonUseCtf:'周大福回收價格低於我們的最新採購單價，安全範圍內，建議直接按周大福價格 HK$'+'{price}/克 回收。',
-      rwSuggestReasonReduced:'周大福回收價格已高於我們的最新採購單價，若直接跟進將出現虧損，已按最新採購單價下調 {edge}%，建議回收價 HK$'+'{price}/克。',
+      pwSuggestReasonEdgeClamped:'按周大福價格下調 {edge}% 計算，建議售價 HK$'+'{price}/克，已低於我們的最低售價，若照此定價將不足利潤要求，請留意調整降價幅度。',
+      rwSuggestedPrice:'建議回收價（港元/克，整數）', rwSuggestAboveCostNote:'⚠️ 該價格高於最新採購單價，不能高於最新採購單價，請留意調整。', rwSuggestBelowCostNote:'⚠️ 該價格低於最新採購單價，請注意。',
+      rwSuggestReasonWithinSafe:'按周大福回收價格上調 {edge}% 計算，建議回收價 HK$'+'{price}/克，未超過我們的最新採購單價，可安全回收。',
+      rwSuggestReasonAboveSuggested:'按周大福回收價格上調 {edge}% 計算，建議回收價 HK$'+'{price}/克，已高於我們的最新採購單價，若照此回收將出現虧損，請留意調整幅度或核實價格。',
       homeKpiTitle:'經營概覽', homeKpiHint:'根據本地示範資料計算',
       kpiTodaySales:'今日銷售額', unitCnyLabel:'元（RMB）', kpiTodayWeight:'今日銷售克重', kpiInvWeight:'庫存總克重（估值）', kpiMonthSales:'本月累計銷售額',
       homeChartTitle:'銷售趨勢', homeChartSubtitle:'近 7 日銷售趨勢（克重）',
@@ -1144,22 +1146,22 @@
       pwNoPurchase:'No purchase batch with remaining stock for this product \u2014 add one under Purchasing (with stock left).',
       pwRateUnavailable:'The current exchange rate isn\u2019t available right now, so HKD conversion isn\u2019t possible \u2014 try again shortly.',
       pwNeedManualPrice:'Enter and save Chow Tai Fook HK\u2019s official price above to run the comparison.',
-      pwWarningText:'\u26a0\ufe0f Warning: our minimum selling price HK{min}/g is above Chow Tai Fook HK\u2019s official price HK{ctf}/g \u2014 pricing may be too high, please review.',
-      pwOkText:'\u2705 OK: our minimum selling price HK{min}/g is not above Chow Tai Fook HK\u2019s official price HK{ctf}/g.',
+      pwWarningText:'\u26a0\ufe0f Warning: the suggested selling price (computed with the decrease margin) HK{ctf}/g is below our minimum selling price HK{min}/g \u2014 this would fall short of required margin, please review.',
+      pwOkText:'\u2705 OK: the suggested selling price HK{ctf}/g is not below our minimum selling price HK{min}/g \u2014 meets pricing requirements.',
       recycleWarnTitle:'Recycle Price Alert', recycleWarnHint:'Buyback price must not exceed our purchase price',
-      recycleLogicExplain:'Rule: \u2460 If Chow Tai Fook\u2019s recycle price is <b>lower</b> \u2014 it\u2019s safely below our cost, so just match their price directly. \u2461 If it\u2019s <b>higher</b> \u2014 matching it would lose money, so the system flags it for sales staff and suggests a safer price instead: \u201cour cost minus the decrease margin%\u201d.',
+      recycleLogicExplain:'Rule: suggested buyback price = Chow Tai Fook\u2019s recycle price \u00d7 (1 + price increase%). If the resulting suggested price is <b>above</b> our latest purchase cost, buying back at that price would be at a loss, so the system raises an alert.',
       fieldRecyclePrice:'Chow Tai Fook HK official recycle price (enter manually, HKD/g)', phRecyclePrice:'Check the official site and enter manually',
       rwRecycleRef:'Chow Tai Fook Recycle Price (manual, HKD/g)', rwNeedManualPrice:'Enter and save Chow Tai Fook HK\u2019s official recycle price above to run the comparison.',
-      rwWarningText:'\u26a0\ufe0f Alert: Chow Tai Fook\u2019s recycle price HK{rw}/g is above our latest purchase cost HK{cost}/g \u2014 sales staff should not simply match Chow Tai Fook\u2019s price, or buyback will be at a loss.',
-      rwOkText:'\u2705 OK: Chow Tai Fook\u2019s recycle price HK{rw}/g is not above our purchase unit price HK{cost}/g \u2014 matching it would not cause a loss.',
-      fieldEdgePctUp:'Price Edge (%, default 1%)', fieldEdgePctDown:'Price Edge (%, default 1%)',
+      rwWarningText:'\u26a0\ufe0f Alert: the suggested buyback price (computed with the increase margin) HK{rw}/g is above our latest purchase cost HK{cost}/g \u2014 buying back at this price would be at a loss, please review.',
+      rwOkText:'\u2705 OK: the suggested buyback price HK{rw}/g is not above our purchase cost HK{cost}/g \u2014 safe to proceed.',
+      fieldEdgePctUp:'Price Decrease Margin (%, default 1%)', fieldEdgePctDown:'Price Increase Margin (%, default 1%)',
       pwSuggestedPrice:'Suggested Selling Price (HKD/g, whole number)',
-      pwSuggestReasonEdge:'Chow Tai Fook\u2019s price is higher \u2014 priced at HK{price}/g using a {edge}% edge, still below Chow Tai Fook, balancing competitiveness and margin.',
+      pwSuggestReasonEdge:'Computed as Chow Tai Fook\u2019s price minus {edge}%, the suggested selling price HK{price}/g is not below our minimum selling price \u2014 meets pricing requirements.',
       pwSuggestReasonFloor:'Chow Tai Fook\u2019s price doesn\u2019t exceed our minimum \u2014 the {edge}% edge doesn\u2019t apply here, using the minimum HK{price}/g directly.',
-      pwSuggestReasonEdgeClamped:'The price computed with a {edge}% edge would fall below our minimum \u2014 the edge is larger than the available room, so we fall back to the minimum HK{price}/g.',
-      rwSuggestedPrice:'Suggested Buyback Price (HKD/g, whole number)',
-      rwSuggestReasonUseCtf:'Chow Tai Fook\u2019s recycle price is below our latest purchase cost \u2014 safe to match it directly, suggested buyback price HK{price}/g.',
-      rwSuggestReasonReduced:'Chow Tai Fook\u2019s recycle price is above our latest purchase cost \u2014 matching it would cause a loss, so we reduced our cost by {edge}%, suggested buyback price HK{price}/g.',
+      pwSuggestReasonEdgeClamped:'Computed as Chow Tai Fook\u2019s price minus {edge}%, the suggested selling price HK{price}/g is below our minimum selling price \u2014 this would fall short of required margin, please review the decrease margin.',
+      rwSuggestedPrice:'Suggested Buyback Price (HKD/g, whole number)', rwSuggestAboveCostNote:'\u26a0\ufe0f This price is above the latest purchase cost \u2014 it must not exceed the purchase cost, please adjust.', rwSuggestBelowCostNote:'\u26a0\ufe0f This price is below the latest purchase cost \u2014 please note.',
+      rwSuggestReasonWithinSafe:'Suggested buyback price, computed as Chow Tai Fook\u2019s price + {edge}%, is HK{price}/g \u2014 this doesn\u2019t exceed our latest purchase cost, safe to proceed.',
+      rwSuggestReasonAboveSuggested:'Suggested buyback price, computed as Chow Tai Fook\u2019s price + {edge}%, is HK{price}/g \u2014 this exceeds our latest purchase cost, so buying back at this price would be at a loss. Please review the margin or verify the price.',
       homeKpiTitle:'Business Overview', homeKpiHint:'Calculated from local demo data',
       kpiTodaySales:'Today\u2019s Sales', unitCnyLabel:'RMB (CNY)', kpiTodayWeight:'Today\u2019s Sold Weight', kpiInvWeight:'Total Stock Weight (valued)', kpiMonthSales:'Month-to-date Sales',
       homeChartTitle:'Sales Trend', homeChartSubtitle:'Sales weight, last 7 days',
@@ -1255,7 +1257,7 @@
     if (activePage) $('pageTitle').textContent = t(pageTitleKeys[activePage.getAttribute('data-page')]);
     renderPurchaseTable(); renderSalesTable(); renderInventoryTable(); renderEmployees(); renderLogs();
     renderPurchaseLinkOptions(); computeProfitPreview();
-    renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning();
+    renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(true);
   }
   document.querySelectorAll('.lang-opt').forEach(el => {
     el.addEventListener('click', () => applyLang(el.getAttribute('data-lang')));
@@ -1726,7 +1728,7 @@
     renderPurchaseTable();
     renderHomeKpisAndChart();
     renderPriceWarning();
-    renderRecycleWarning();
+    renderRecycleWarning(true);
   });
   function renderPurchaseTable(){
     const purchases = loadArr(PURCHASES_KEY);
@@ -1756,7 +1758,7 @@
       renderPurchaseTable();
       renderHomeKpisAndChart();
       renderPriceWarning();
-      renderRecycleWarning();
+      renderRecycleWarning(true);
     }));
   }
 
@@ -1919,7 +1921,7 @@
     renderHomeKpisAndChart();
     renderInventoryTable();
     renderPriceWarning();
-    renderRecycleWarning();
+    renderRecycleWarning(true);
   });
   function renderSalesTable(){
     const sales = loadArr(SALES_KEY);
@@ -2184,32 +2186,27 @@
     }
 
     $('pwCtfDisplay').textContent = 'HK$' + fmtNum(savedPrice, 2);
-    if (minSellHkd > savedPrice){
+
+    // Suggested selling price — rule: 建议售价 = 周大福香港官网金价 × (1 − 价格下调幅度%).
+    // No clamping/ceiling here — it varies freely and directly with the edge%, so it keeps
+    // responding at any percentage instead of getting stuck once it crosses some threshold.
+    // Our own minimum selling price (cost + 6%) is only used to decide whether to alert:
+    // if the suggested price would fall below that floor, selling at it would eat into
+    // required margin, so staff are warned.
+    const suggested = Math.ceil(savedPrice * (1 - edgePct/100));
+    const suggestedBelowMinSell = suggested < minSellHkd;
+
+    $('pwSuggestDisplay').textContent = 'HK$' + suggested;
+
+    if (suggestedBelowMinSell){
       box.className = 'price-placeholder pw-danger';
-      box.textContent = t('pwWarningText').replace('{min}', fmtNum(minSellHkd,2)).replace('{ctf}', fmtNum(savedPrice,2));
+      box.textContent = t('pwWarningText').replace('{min}', fmtNum(minSellHkd,2)).replace('{ctf}', fmtNum(suggested,2));
     } else {
       box.className = 'price-placeholder pw-ok';
-      box.textContent = t('pwOkText').replace('{min}', fmtNum(minSellHkd,2)).replace('{ctf}', fmtNum(savedPrice,2));
+      box.textContent = t('pwOkText').replace('{min}', fmtNum(minSellHkd,2)).replace('{ctf}', fmtNum(suggested,2));
     }
 
-    // Suggested selling price: undercut CTF by edgePct% when there's room above our
-    // floor, otherwise fall back to the floor itself (rounded UP so we never suggest
-    // below the required minimum).
-    let suggested, reasonKey;
-    if (savedPrice > minSellHkd){
-      const edgePrice = savedPrice * (1 - edgePct/100);
-      if (edgePrice > minSellHkd){
-        suggested = Math.ceil(edgePrice);
-        reasonKey = 'pwSuggestReasonEdge';
-      } else {
-        suggested = Math.ceil(minSellHkd);
-        reasonKey = 'pwSuggestReasonEdgeClamped';
-      }
-    } else {
-      suggested = Math.ceil(minSellHkd);
-      reasonKey = 'pwSuggestReasonFloor';
-    }
-    $('pwSuggestDisplay').textContent = 'HK$' + suggested;
+    const reasonKey = suggestedBelowMinSell ? 'pwSuggestReasonEdgeClamped' : 'pwSuggestReasonEdge';
     reasonBox.textContent = t(reasonKey).replace('{edge}', edgePct).replace('{price}', suggested);
   }
   $('pwProduct').addEventListener('change', renderPriceWarning);
@@ -2222,7 +2219,7 @@
     if (edge !== '') setPwEdgePct(parseFloat(edge));
     logAction(t('logUpdateParams'), t('priceWarnTitle') + ' · ' + product);
     renderPriceWarning();
-    renderRecycleWarning();
+    renderRecycleWarning(true);
   });
 
   /* ============ Recycle/buyback price warning (must not exceed our purchase price) ============ */
@@ -2233,15 +2230,19 @@
     if (price === null){ delete all[product]; } else { all[product] = price; }
     try{ localStorage.setItem(RECYCLE_MANUAL_PRICE_KEY, JSON.stringify(all)); }catch(e){}
   }
-  function renderRecycleWarning(){
+  function renderRecycleWarning(syncFieldsFromStorage){
     const product = $('rwProduct').value;
     if (!product) return;
     const manualPrices = getRecycleManualPrices();
     const savedPrice = manualPrices[product];
-    if (document.activeElement !== $('rwPrice')) $('rwPrice').value = (savedPrice != null) ? savedPrice : '';
-    if (document.activeElement !== $('rwEdgePct')) $('rwEdgePct').value = getRwEdgePct();
-    const typedRwEdge = $('rwEdgePct').value.trim();
-    const edgePct = typedRwEdge !== '' ? parseFloat(typedRwEdge) : getRwEdgePct();
+    if (syncFieldsFromStorage){
+      $('rwPrice').value = (savedPrice != null) ? savedPrice : '';
+      $('rwEdgePct').value = getRwEdgePct();
+    }
+    // Always read the live value straight from the input for the actual calculation, so
+    // the suggested price recomputes on every keystroke regardless of focus state.
+    const liveEdgeVal = $('rwEdgePct').value;
+    const edgePct = (liveEdgeVal !== '' && !isNaN(parseFloat(liveEdgeVal))) ? parseFloat(liveEdgeVal) : 1;
 
     const purchase = referencePurchaseForProduct(product);
     const box = $('rwWarningBox');
@@ -2252,6 +2253,8 @@
       $('rwCostMarkupSuffix').textContent = costSuffixText(null);
       $('rwPriceDisplay').textContent = (savedPrice != null) ? ('HK$'+fmtNum(savedPrice,2)) : '--';
       $('rwSuggestDisplay').textContent = '--';
+      $('rwSuggestAboveCostNote').style.display = 'none';
+      $('rwSuggestBelowCostNote').style.display = 'none';
       box.className = 'price-placeholder pw-neutral';
       box.textContent = t('pwNoPurchase');
       reasonBox.textContent = '';
@@ -2264,6 +2267,8 @@
       $('rwCostDisplay').textContent = '--';
       $('rwPriceDisplay').textContent = (savedPrice != null) ? ('HK$'+fmtNum(savedPrice,2)) : '--';
       $('rwSuggestDisplay').textContent = '--';
+      $('rwSuggestAboveCostNote').style.display = 'none';
+      $('rwSuggestBelowCostNote').style.display = 'none';
       box.className = 'price-placeholder pw-neutral';
       box.textContent = t('pwRateUnavailable');
       reasonBox.textContent = '';
@@ -2274,43 +2279,40 @@
 
     if (savedPrice == null){
       $('rwPriceDisplay').textContent = '--';
-      $('rwSuggestDisplay').textContent = 'HK$' + Math.floor(costHkd);
+      $('rwSuggestDisplay').textContent = '--';
+      $('rwSuggestAboveCostNote').style.display = 'none';
+      $('rwSuggestBelowCostNote').style.display = 'none';
       box.className = 'price-placeholder pw-neutral';
       box.textContent = t('rwNeedManualPrice');
       reasonBox.textContent = '';
       return;
     }
 
+    // Suggested recycle price — rule: 建议回收价 = 周大福回收金价 × (1 + 价格上调幅度%).
+    // The formula is based entirely on Chow Tai Fook's own recycle price, not our cost.
+    // Our purchase cost only serves as a safety ceiling: if the resulting suggested price
+    // would exceed what we ourselves paid for stock, that's a loss risk and raises an alert.
+    const suggested = Math.ceil(savedPrice * (1 + edgePct/100));
+    const suggestedExceedsCost = suggested > costHkd;
+
     $('rwPriceDisplay').textContent = 'HK$' + fmtNum(savedPrice, 2);
-    if (savedPrice > costHkd){
+    $('rwSuggestDisplay').textContent = 'HK$' + suggested;
+    $('rwSuggestAboveCostNote').style.display = suggestedExceedsCost ? 'block' : 'none';
+    $('rwSuggestBelowCostNote').style.display = 'none';
+
+    if (suggestedExceedsCost){
       box.className = 'price-placeholder pw-danger';
-      box.textContent = t('rwWarningText').replace('{rw}', fmtNum(savedPrice,2)).replace('{cost}', fmtNum(costHkd,2));
+      box.textContent = t('rwWarningText').replace('{rw}', fmtNum(suggested,2)).replace('{cost}', fmtNum(costHkd,2));
     } else {
       box.className = 'price-placeholder pw-ok';
-      box.textContent = t('rwOkText').replace('{rw}', fmtNum(savedPrice,2)).replace('{cost}', fmtNum(costHkd,2));
+      box.textContent = t('rwOkText').replace('{rw}', fmtNum(suggested,2)).replace('{cost}', fmtNum(costHkd,2));
     }
 
-    // Suggested recycle price: outbid Chow Tai Fook's recycle price by edgePct% to
-    // attract sellers, whenever their price leaves room below our cost — capped at
-    // cost (rounded DOWN so we never suggest paying more than we paid).
-    // Suggested recycle price:
-    // - If Chow Tai Fook's recycle price is below our cost, it's safe to just match their
-    //   price directly (no adjustment) — we're not at risk of a loss.
-    // - If their price is at or above our cost, matching it would lose money, so instead
-    //   suggest our own cost reduced by edgePct% (default 1%) as a safer offer.
-    let suggested, reasonKey;
-    if (savedPrice < costHkd){
-      suggested = Math.floor(savedPrice);
-      reasonKey = 'rwSuggestReasonUseCtf';
-    } else {
-      suggested = Math.floor(costHkd * (1 - edgePct/100));
-      reasonKey = 'rwSuggestReasonReduced';
-    }
-    $('rwSuggestDisplay').textContent = 'HK$' + suggested;
+    const reasonKey = suggestedExceedsCost ? 'rwSuggestReasonAboveSuggested' : 'rwSuggestReasonWithinSafe';
     reasonBox.textContent = t(reasonKey).replace('{edge}', edgePct).replace('{price}', suggested);
   }
-  $('rwProduct').addEventListener('change', renderRecycleWarning);
-  $('rwEdgePct').addEventListener('input', renderRecycleWarning);
+  $('rwProduct').addEventListener('change', () => renderRecycleWarning(true));
+  $('rwEdgePct').addEventListener('input', () => renderRecycleWarning());
   $('rwSave').addEventListener('click', () => {
     const product = $('rwProduct').value;
     const v = $('rwPrice').value.trim();
@@ -2318,7 +2320,7 @@
     setRecycleManualPrice(product, v === '' ? null : parseFloat(v));
     if (edge !== '') setRwEdgePct(parseFloat(edge));
     logAction(t('logUpdateParams'), t('recycleWarnTitle') + ' · ' + product);
-    renderRecycleWarning();
+    renderRecycleWarning(true);
   });
 
   /* ============ System management: employees ============ */
@@ -2548,7 +2550,7 @@
   renderFinance();
   renderReports();
   renderPriceWarning();
-  renderRecycleWarning();
+  renderRecycleWarning(true);
   applyLang(currentLang);
   refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); });
   setInterval(() => { refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); }); }, 10000);
