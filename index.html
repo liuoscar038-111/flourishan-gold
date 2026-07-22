@@ -332,6 +332,27 @@
   </div>
 </div>
 
+<!-- First-login / forced password change modal -->
+<div class="modal-overlay" id="mustChangePwModal">
+  <div class="modal-box">
+    <h3 data-i18n="mustChangePwTitle">首次登录，建议修改密码</h3>
+    <div class="desc" data-i18n="mustChangePwDesc">为了账号安全，建议现在把初始密码改成只有你自己知道的密码。这里改的密码会直接更新到"系统管理 → 员工账号管理"里你自己的账号上。</div>
+    <div class="login-error" id="mustChangePwError" data-i18n="alertPasswordMismatch">两次输入的密码不一致</div>
+    <div class="modal-field">
+      <label data-i18n="mustChangePwNewLabel">新密码</label>
+      <input type="password" id="mustChangePwNew">
+    </div>
+    <div class="modal-field">
+      <label data-i18n="mustChangePwConfirmLabel">确认新密码</label>
+      <input type="password" id="mustChangePwConfirm">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="mustChangePwSkip" data-i18n="mustChangePwSkip">暂不修改</button>
+      <button class="btn btn-primary" id="mustChangePwSave" data-i18n="mustChangePwSave">确认修改</button>
+    </div>
+  </div>
+</div>
+
 <div class="app" id="appRoot" style="display:none;">
 
   <!-- Sidebar -->
@@ -978,6 +999,10 @@
       empSectionTitle:'员工账号管理', empFormTitle:'新增员工账号', fieldName:'姓名', phEmpName:'如：李经理',
       phEmpUsername:'如：liming', phEmpPassword:'设置该员工的登录密码', btnResetPassword:'重置密码',
       promptNewPassword:'请输入新密码', alertUsernameTaken:'该登录账号已被使用，请换一个', alertPasswordRequired:'密码不能为空',
+      alertPasswordMismatch:'两次输入的密码不一致',
+      mustChangePwTitle:'首次登录，建议修改密码',
+      mustChangePwDesc:'为了账号安全，建议现在把初始密码改成只有你自己知道的密码。这里改的密码会直接更新到"系统管理 → 员工账号管理"里你自己的账号上。',
+      mustChangePwNewLabel:'新密码', mustChangePwConfirmLabel:'确认新密码', mustChangePwSkip:'暂不修改', mustChangePwSave:'确认修改',
       logResetPassword:'重置员工密码',
       fieldRole:'角色', roleAdminOpt:'管理员', roleSalesOpt:'销售员', roleStockOpt:'仓管员', thStatus:'状态', emptyEmp:'还没有员工账号。',
       paramsSectionTitle:'参数设置', paramsCtfTitle:'金价数据源（周大福 · 香港金价）', fieldJisuKey:'极速数据 APPKEY',
@@ -1087,6 +1112,10 @@
       empSectionTitle:'員工帳號管理', empFormTitle:'新增員工帳號', fieldName:'姓名', phEmpName:'如：李經理',
       phEmpUsername:'如：liming', phEmpPassword:'設定該員工的登入密碼', btnResetPassword:'重設密碼',
       promptNewPassword:'請輸入新密碼', alertUsernameTaken:'該登入帳號已被使用，請換一個', alertPasswordRequired:'密碼不能為空',
+      alertPasswordMismatch:'兩次輸入的密碼不一致',
+      mustChangePwTitle:'首次登入，建議修改密碼',
+      mustChangePwDesc:'為了帳號安全，建議現在把初始密碼改成只有你自己知道的密碼。這裡改的密碼會直接更新到「系統管理 → 員工帳號管理」裡你自己的帳號上。',
+      mustChangePwNewLabel:'新密碼', mustChangePwConfirmLabel:'確認新密碼', mustChangePwSkip:'暫不修改', mustChangePwSave:'確認修改',
       logResetPassword:'重設員工密碼',
       fieldRole:'角色', roleAdminOpt:'管理員', roleSalesOpt:'銷售員', roleStockOpt:'倉管員', thStatus:'狀態', emptyEmp:'還沒有員工帳號。',
       paramsSectionTitle:'參數設定', paramsCtfTitle:'金價資料來源（周大福 · 香港金價）', fieldJisuKey:'極速數據 APPKEY',
@@ -1195,6 +1224,10 @@
       empSectionTitle:'Staff Accounts', empFormTitle:'Add Staff Account', fieldName:'Name', phEmpName:'e.g. Manager Li',
       phEmpUsername:'e.g. liming', phEmpPassword:'Set this employee\u2019s login password', btnResetPassword:'Reset password',
       promptNewPassword:'Enter a new password', alertUsernameTaken:'That login username is already taken', alertPasswordRequired:'Password cannot be empty',
+      alertPasswordMismatch:'The two passwords don\u2019t match',
+      mustChangePwTitle:'First login \u2014 we recommend changing your password',
+      mustChangePwDesc:'For account security, set a password only you know. Changing it here updates your own account directly under System \u2192 Staff Accounts.',
+      mustChangePwNewLabel:'New password', mustChangePwConfirmLabel:'Confirm new password', mustChangePwSkip:'Skip for now', mustChangePwSave:'Save',
       logResetPassword:'Reset staff password',
       fieldRole:'Role', roleAdminOpt:'Admin', roleSalesOpt:'Sales staff', roleStockOpt:'Stock keeper', thStatus:'Status', emptyEmp:'No staff accounts yet.',
       paramsSectionTitle:'Parameters', paramsCtfTitle:'Gold Price Source (CTF · HK)', fieldJisuKey:'Jisuapi APPKEY',
@@ -1265,6 +1298,7 @@
 
   /* ============ Auth (cosmetic local-demo login, not real security) ============ */
   const SESSION_KEY = 'erp_session_active';
+  let pendingPasswordChangeEmpId = null;
   const SESSION_EMP_KEY = 'erp_session_employee_id';
   function isLoggedIn(){ try{ return localStorage.getItem(SESSION_KEY) === '1'; }catch(e){ return false; } }
   function setLoggedIn(v, empId){
@@ -1297,10 +1331,21 @@
     if (emp && emp.active !== false){
       errEl.classList.remove('show');
       setLoggedIn(true, emp.id);
-      showApp();
+      if (emp.mustChangePassword){
+        showMustChangePasswordModal(emp.id);
+      } else {
+        showApp();
+      }
     } else {
       errEl.classList.add('show');
     }
+  }
+  function showMustChangePasswordModal(empId){
+    pendingPasswordChangeEmpId = empId;
+    document.getElementById('mustChangePwModal').classList.add('show');
+    document.getElementById('mustChangePwNew').value = '';
+    document.getElementById('mustChangePwConfirm').value = '';
+    document.getElementById('mustChangePwError').classList.remove('show');
   }
   document.getElementById('loginBtn').addEventListener('click', attemptLogin);
   document.getElementById('loginPassword').addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
@@ -1311,6 +1356,37 @@
     document.getElementById('loginPassword').value = '';
     document.getElementById('loginError').classList.remove('show');
     showLogin();
+  });
+
+  document.getElementById('mustChangePwSave').addEventListener('click', () => {
+    const newPw = document.getElementById('mustChangePwNew').value.trim();
+    const confirmPw = document.getElementById('mustChangePwConfirm').value.trim();
+    const errEl = document.getElementById('mustChangePwError');
+    if (!newPw || !confirmPw){
+      errEl.textContent = t('alertPasswordRequired');
+      errEl.classList.add('show');
+      return;
+    }
+    if (newPw !== confirmPw){
+      errEl.textContent = t('alertPasswordMismatch');
+      errEl.classList.add('show');
+      return;
+    }
+    const list = loadArr(EMPLOYEES_KEY);
+    const emp = list.find(e => e.id === pendingPasswordChangeEmpId);
+    if (emp){
+      emp.password = newPw;
+      emp.mustChangePassword = false;
+      saveArr(EMPLOYEES_KEY, list);
+      logAction(t('logResetPassword'), emp.name);
+    }
+    document.getElementById('mustChangePwModal').classList.remove('show');
+    showApp();
+  });
+  document.getElementById('mustChangePwSkip').addEventListener('click', () => {
+    // Skipping does NOT clear the flag, so this employee will be prompted again next login.
+    document.getElementById('mustChangePwModal').classList.remove('show');
+    showApp();
   });
 
   /* ============ Seed data ============ */
@@ -1347,7 +1423,8 @@
     if (employees.length === 0){
       employees = [{
         id: genId(), name: '管理员', role: 'admin',
-        username: legacyUser || 'admin', password: legacyPass || 'admin123', active: true
+        username: legacyUser || 'admin', password: legacyPass || 'admin123', active: true,
+        mustChangePassword: true
       }];
       saveArr(EMPLOYEES_KEY, employees);
     } else {
@@ -1356,6 +1433,7 @@
       employees.forEach((e,i) => {
         if (!e.username){ e.username = (i===0 ? (legacyUser||'admin') : ('user'+(i+1))); changed = true; }
         if (!e.password){ e.password = (i===0 ? (legacyPass||'admin123') : Math.random().toString(36).slice(2,8)); changed = true; }
+        if (e.mustChangePassword === undefined){ e.mustChangePassword = true; changed = true; }
       });
       if (changed) saveArr(EMPLOYEES_KEY, employees);
     }
@@ -2351,6 +2429,7 @@
       if (newPw === null) return;
       if (!newPw.trim()){ alert(t('alertPasswordRequired')); return; }
       e.password = newPw.trim();
+      e.mustChangePassword = true;
       saveArr(EMPLOYEES_KEY, list);
       logAction(t('logResetPassword'), e.name);
       alert(t('alertAccountSaved'));
@@ -2374,7 +2453,7 @@
     if (!password){ alert(t('alertPasswordRequired')); return; }
     const list = loadArr(EMPLOYEES_KEY);
     if (list.some(e => e.username === username)){ alert(t('alertUsernameTaken')); return; }
-    list.push({ id: genId(), name, role, username, password, active:true });
+    list.push({ id: genId(), name, role, username, password, active:true, mustChangePassword:true });
     saveArr(EMPLOYEES_KEY, list);
     logAction(t('logNewEmp'), name + '（' + t(roleKeyMap[role]||'roleSalesOpt') + ' · ' + username + '）');
     $('empName').value = ''; $('empUsername').value = ''; $('empPassword').value = '';
