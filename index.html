@@ -295,6 +295,15 @@
     width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:8px; font-size:13.5px; font-family:inherit;
   }
   .login-field input:focus{ outline:none; border-color:var(--accent); }
+  .login-pw-wrap{ position:relative; }
+  .login-pw-wrap input{ padding-right:38px; }
+  .login-pw-toggle{
+    position:absolute; right:4px; top:50%; transform:translateY(-50%);
+    width:30px; height:30px; border:none; background:transparent; cursor:pointer;
+    font-size:15px; color:var(--muted); display:flex; align-items:center; justify-content:center;
+    border-radius:6px; opacity:0.7;
+  }
+  .login-pw-toggle:hover{ opacity:1; background:var(--bg); }
   .login-error{
     display:none; font-size:12px; color:var(--rise); background:var(--rise-soft); border-radius:8px; padding:8px 10px; margin-bottom:14px;
   }
@@ -341,7 +350,10 @@
     </div>
     <div class="login-field">
       <label data-i18n="loginPassword">密码</label>
-      <input type="password" id="loginPassword" autocomplete="current-password">
+      <div class="login-pw-wrap">
+        <input type="password" id="loginPassword" autocomplete="current-password">
+        <button type="button" class="login-pw-toggle" id="loginPwToggle" aria-label="show password">👁</button>
+      </div>
     </div>
     <button class="login-btn" id="loginBtn" data-i18n="loginBtn">登录</button>
     <div class="login-hint" data-i18n="loginHintText">演示默认账号：admin　默认密码：admin123（可在系统管理中修改）</div>
@@ -1059,7 +1071,7 @@
 
   /* ============ i18n ============ */
   const LANG_KEY = 'erp_lang';
-  let currentLang = (function(){ try{ return localStorage.getItem(LANG_KEY) || 'zh'; }catch(e){ return 'zh'; } })();
+  let currentLang = (function(){ try{ return localStorage.getItem(LANG_KEY) || 'zh-Hant'; }catch(e){ return 'zh-Hant'; } })();
 
   const I18N = {
     zh: {
@@ -1487,6 +1499,13 @@
     document.getElementById('mustChangePwError').classList.remove('show');
   }
   document.getElementById('loginBtn').addEventListener('click', attemptLogin);
+  document.getElementById('loginPwToggle').addEventListener('click', () => {
+    const pwInput = document.getElementById('loginPassword');
+    const toggleBtn = document.getElementById('loginPwToggle');
+    const showing = pwInput.type === 'text';
+    pwInput.type = showing ? 'password' : 'text';
+    toggleBtn.textContent = showing ? '👁' : '🙈';
+  });
   document.getElementById('loginPassword').addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
   document.getElementById('loginUsername').addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
   document.getElementById('logoutBtn').addEventListener('click', () => {
