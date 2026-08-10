@@ -1608,7 +1608,7 @@
 
   /* ============ Gold price sources (东方财富网 for SGE + London; 极速数据 for 周大福 HK) ============ */
   const OZ_TO_G = 31.1035;
-  const TIMEOUT_MS = 7000;
+  const TIMEOUT_MS = 4000;
 
   async function fetchJson(url){
     const controller = new AbortController();
@@ -1653,14 +1653,14 @@
     // from localhost/CodePen/GitHub.io-style dev origins and rejects everything else, so it
     // would never work once this page is actually deployed somewhere. thingproxy.freeboard.io
     // is also excluded — observed as ERR_CONNECTION_CLOSED in production, appears to be down.
-    // AllOrigins/CodeTabs need no registration so they're tried first; Corsfix is tried last
-    // since it needs the deployed domain added to a free Corsfix dashboard first (see System
-    // Management notes) — until then it will keep failing with HTTP 403.
+    // AllOrigins/CodeTabs need no registration so those are the only automatic attempts.
+    // corsfix is deliberately NOT tried automatically — it needs the deployed domain added
+    // to a free Corsfix dashboard first (see System Management notes); until that's done it
+    // would just fail with HTTP 403 and waste a full timeout cycle on every refresh.
     const attempts = [
       { name: 'direct', url: targetUrl },
       { name: 'allorigins', url: "https://api.allorigins.win/raw?url=" + encodeURIComponent(targetUrl) },
       { name: 'codetabs', url: "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(targetUrl) },
-      { name: 'corsfix', url: "https://proxy.corsfix.com/?" + targetUrl },
     ];
     for (const attempt of attempts){
       try{
@@ -1790,27 +1790,31 @@
       const londonUsd = j.data.f43;
       let rate = null;
 
-      // Priority: (1) licensed 聚合数据 bank-rate API if configured, (2) Bank of China's
-      // official page (scraped), (3) market-rate FX API as a last resort. BOC only
-      // publishes HKD, not USD, so the market FX call is needed regardless for USD/CNY.
-      const juheRate = await fetchJuheHkdRate();
-      const bochkRate = juheRate ? null : await fetchBochkHkdRate();
-      const bocRate = (juheRate || bochkRate) ? null : await fetchBocHkdRate();
+      // Priority: (1) licensed 聚合数据 bank-rate API if configured, (2) 中银香港, (3) 中国银行,
+      // (4) market-rate FX API as a last resort. All of these are kicked off IN PARALLEL
+      // (not one after another) so a slow/failing source doesn't hold up the others — we
+      // pick whichever succeeds according to priority once they've all settled, so the page
+      // never sits blank for the ~30s+ that a fully sequential cascade could take.
+      const [juheResult, bochkResult, bocResult, marketResult] = await Promise.allSettled([
+        fetchJuheHkdRate(),
+        fetchBochkHkdRate(),
+        fetchBocHkdRate(),
+        fetchJson(FX_URL),
+      ]);
+      const juheRate = juheResult.status === 'fulfilled' ? juheResult.value : null;
+      const bochkRate = bochkResult.status === 'fulfilled' ? bochkResult.value : null;
+      const bocRate = bocResult.status === 'fulfilled' ? bocResult.value : null;
+      const fx = marketResult.status === 'fulfilled' ? marketResult.value : null;
+
       let hkdSource = null;
       if (juheRate){ hkdCnyRateGlobal = getHkdRateOverride() || juheRate; hkdSource = t('srcJuheFx'); }
       else if (bochkRate){ hkdCnyRateGlobal = getHkdRateOverride() || bochkRate; hkdSource = t('srcBochk'); }
       else if (bocRate){ hkdCnyRateGlobal = getHkdRateOverride() || bocRate; hkdSource = t('srcBoc'); }
-
-      try{
-        const fx = await fetchJson(FX_URL);
-        if (fx && fx.rates){
-          rate = fx.rates.CNY;
-          if (!juheRate && !bochkRate && !bocRate && fx.rates.HKD){
-            hkdCnyRateGlobal = getHkdRateOverride() || (fx.rates.CNY / fx.rates.HKD);
-            hkdSource = t('srcMarketRate');
-          }
-        }
-      }catch(e){ /* rate stays null */ }
+      else if (fx && fx.rates && fx.rates.HKD){
+        hkdCnyRateGlobal = getHkdRateOverride() || (fx.rates.CNY / fx.rates.HKD);
+        hkdSource = t('srcMarketRate');
+      }
+      if (fx && fx.rates) rate = fx.rates.CNY;
       hkdRateSourceGlobal = hkdSource;
 
       // Live CNY/HKD rate display on the home page
