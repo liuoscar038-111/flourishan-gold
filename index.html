@@ -949,11 +949,22 @@
 
   async function dbRequest(table, method, query, body){
     const qs = query ? ('?' + query) : '';
-    const res = await fetch('/api/db/' + table + qs, {
-      method: method,
-      headers: { 'Content-Type': 'application/json' },
-      body: body ? JSON.stringify(body) : undefined,
-    });
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 12000);
+    let res;
+    try{
+      res = await fetch('/api/db/' + table + qs, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined,
+        signal: controller.signal,
+      });
+    }catch(e){
+      if (e.name === 'AbortError') throw new Error('DB ' + method + ' ' + table + ' timed out');
+      throw e;
+    }finally{
+      clearTimeout(timer);
+    }
     if (!res.ok){
       const text = await res.text().catch(() => '');
       throw new Error('DB ' + method + ' ' + table + ' failed: HTTP ' + res.status + ' ' + text);
@@ -1046,7 +1057,7 @@
       navMain:'主要功能', navHome:'首页', navPurchase:'采购管理', navSales:'销售管理', navInventory:'库存管理',
       navFinance:'财务管理', navReports:'报表与统计', navSystem:'系统管理', sidebarFoot:'V0.4 简化版 · 本地演示数据',
       loginSubBrand:'黄金ERP', loginErrorText:'账号或密码错误', loginUsername:'账号', loginPassword:'密码',
-      loadingDataText:'正在加载数据…', alertDbError:'保存失败，请检查网络连接后重试。',
+      loadingDataText:'正在加载数据…', alertDbError:'保存失败，请检查网络连接后重试。', btnRetryReload:'重新加载',
       loginBtn:'登录', loginHintText:'演示默认账号：admin　默认密码：admin123（可在系统管理-员工账号中修改或新增）', logoutBtn:'退出登录',
       accountSectionTitle:'登录账号设置', fieldNewUsername:'账号', fieldNewPassword:'新密码', phKeepCurrent:'留空则不修改',
       alertAccountSaved:'账号设置已保存', alertUsernameRequired:'账号不能为空',
@@ -1160,7 +1171,7 @@
       navMain:'主要功能', navHome:'首頁', navPurchase:'採購管理', navSales:'銷售管理', navInventory:'庫存管理',
       navFinance:'財務管理', navReports:'報表與統計', navSystem:'系統管理', sidebarFoot:'V0.4 簡易版 · 本地示範資料',
       loginSubBrand:'黃金ERP', loginErrorText:'帳號或密碼錯誤', loginUsername:'帳號', loginPassword:'密碼',
-      loadingDataText:'正在載入資料…', alertDbError:'儲存失敗，請檢查網路連線後重試。',
+      loadingDataText:'正在載入資料…', alertDbError:'儲存失敗，請檢查網路連線後重試。', btnRetryReload:'重新載入',
       loginBtn:'登入', loginHintText:'示範預設帳號：admin　預設密碼：admin123（可在系統管理-員工帳號中修改或新增）', logoutBtn:'登出',
       accountSectionTitle:'登入帳號設定', fieldNewUsername:'帳號', fieldNewPassword:'新密碼', phKeepCurrent:'留空則不修改',
       alertAccountSaved:'帳號設定已儲存', alertUsernameRequired:'帳號不能為空',
@@ -1273,7 +1284,7 @@
       navMain:'Main', navHome:'Home', navPurchase:'Purchasing', navSales:'Sales', navInventory:'Inventory',
       navFinance:'Finance', navReports:'Reports', navSystem:'System', sidebarFoot:'V0.4 Lite · Local demo data',
       loginSubBrand:'Gold ERP', loginErrorText:'Incorrect username or password', loginUsername:'Username', loginPassword:'Password',
-      loadingDataText:'Loading data\u2026', alertDbError:'Save failed \u2014 please check your network connection and try again.',
+      loadingDataText:'Loading data\u2026', alertDbError:'Save failed \u2014 please check your network connection and try again.', btnRetryReload:'Reload',
       loginBtn:'Log in', loginHintText:'Demo default — username: admin, password: admin123 (manage under System \u2192 Staff Accounts)', logoutBtn:'Log out',
       accountSectionTitle:'Login Account', fieldNewUsername:'Username', fieldNewPassword:'New password', phKeepCurrent:'Leave blank to keep unchanged',
       alertAccountSaved:'Account settings saved', alertUsernameRequired:'Username cannot be empty',
@@ -1414,6 +1425,8 @@
 
   /* ============ Auth (cosmetic local-demo login, not real security) ============ */
   const SESSION_KEY = 'erp_session_active';
+  const REMEMBERED_USER_KEY = 'erp_remembered_username';
+  const REMEMBERED_PASS_KEY = 'erp_remembered_password';
   let pendingPasswordChangeEmpId = null;
   const SESSION_EMP_KEY = 'erp_session_employee_id';
   function isLoggedIn(){ try{ return localStorage.getItem(SESSION_KEY) === '1'; }catch(e){ return false; } }
@@ -1447,6 +1460,7 @@
     if (emp && emp.active !== false){
       errEl.classList.remove('show');
       setLoggedIn(true, emp.id);
+      try{ localStorage.setItem(REMEMBERED_USER_KEY, u); localStorage.setItem(REMEMBERED_PASS_KEY, p); }catch(e){}
       if (emp.mustChangePassword){
         showMustChangePasswordModal(emp.id);
       } else {
@@ -1468,8 +1482,13 @@
   document.getElementById('loginUsername').addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
   document.getElementById('logoutBtn').addEventListener('click', () => {
     setLoggedIn(false);
-    document.getElementById('loginUsername').value = '';
-    document.getElementById('loginPassword').value = '';
+    try{
+      document.getElementById('loginUsername').value = localStorage.getItem(REMEMBERED_USER_KEY) || '';
+      document.getElementById('loginPassword').value = localStorage.getItem(REMEMBERED_PASS_KEY) || '';
+    }catch(e){
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
+    }
     document.getElementById('loginError').classList.remove('show');
     showLogin();
   });
@@ -2778,14 +2797,25 @@
     }catch(e){
       console.error('[init] failed to load shared data:', e);
       document.getElementById('loadingScreen').innerHTML =
-        '<div class="login-card" style="text-align:center;"><div style="color:var(--rise);font-size:13px;">'
-        + t('alertDbError') + '</div></div>';
+        '<div class="login-card" style="text-align:center;">'
+        + '<div style="color:var(--rise);font-size:13px;margin-bottom:14px;">' + t('alertDbError') + '</div>'
+        + '<button class="login-btn" onclick="location.reload()" style="width:auto;padding:9px 24px;">' + t('btnRetryReload') + '</button>'
+        + '</div>';
       return;
     }
     await ensureSeedEmployees();
     await ensureSeedProducts();
     document.getElementById('loadingScreen').style.display = 'none';
-    if (isLoggedIn()) showApp(); else showLogin();
+    // Always require an explicit login click, even if a past session exists — but if the
+    // user chose to be remembered, pre-fill the fields so they don't have to retype them.
+    setLoggedIn(false);
+    try{
+      const remU = localStorage.getItem(REMEMBERED_USER_KEY);
+      const remP = localStorage.getItem(REMEMBERED_PASS_KEY);
+      if (remU) document.getElementById('loginUsername').value = remU;
+      if (remP) document.getElementById('loginPassword').value = remP;
+    }catch(e){}
+    showLogin();
     renderProductSelects();
     renderPurchaseTable();
     renderSalesTable();
