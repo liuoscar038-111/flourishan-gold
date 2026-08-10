@@ -407,61 +407,6 @@
       <!-- ================= HOME ================= -->
       <section class="page active" id="page-home">
 
-        <div class="section-title"><span data-i18n="homePriceTitle">实时金价</span> <span class="hint"><span data-i18n="homePriceHint">数据来源：东方财富网 · 每 10 秒自动刷新</span> · <span data-i18n="priceDelayNote">（数据延迟，仅作参考）</span></span></div>
-        <div class="price-grid" style="grid-template-columns: repeat(2, 1fr);">
-          <div class="card price-card">
-            <div class="eyebrow"><span data-i18n="cardSgeEyebrow">上海黄金交易所 · Au9999</span><span class="src-tag" id="srcSge">东方财富</span></div>
-            <h3 data-i18n="cardSgeTitle">上交所金价</h3>
-            <div><span class="price-main num" id="priceSge">--</span><span class="price-unit" data-i18n="unitYuanGram">元/克</span></div>
-            <span class="price-change" id="changeSge"></span>
-            <div class="converted" style="margin-top:12px;">
-              <div class="k" data-i18n="convertedHkdLabel">折合港元/克</div>
-              <div class="v num" id="priceSgeHkd">--</div>
-            </div>
-            <div class="price-meta"><span data-i18n="updatedAt">更新时间</span> <span id="metaSge">--</span></div>
-          </div>
-
-          <div class="card price-card">
-            <div class="eyebrow"><span data-i18n="cardLondonEyebrow">伦敦金 · 国际金价参考</span><span class="src-tag" id="srcLondon">东方财富</span></div>
-            <h3 data-i18n="cardLondonTitle">伦敦金（换算 元/克）</h3>
-            <div><span class="price-main num" id="priceLondon">--</span><span class="price-unit" data-i18n="unitYuanGram">元/克</span></div>
-            <div class="price-meta num" id="metaLondonUsd">-- <span data-i18n="unitUsdOz">美元/盎司</span></div>
-            <div class="converted" style="margin-top:12px;">
-              <div class="k" data-i18n="convertedHkdLabel">折合港元/克</div>
-              <div class="v num" id="priceLondonHkd">--</div>
-            </div>
-            <div class="price-meta"><span data-i18n="updatedAt">更新时间</span> <span id="metaLondon">--</span></div>
-          </div>
-        </div>
-
-        <div class="price-grid" style="grid-template-columns: 1fr 1fr; margin-top:14px;">
-          <div class="card ctf-link-card">
-            <div class="eyebrow"><span data-i18n="ctfLinkEyebrow">周大福（香港）· 品牌金价</span></div>
-            <a class="ctf-link-btn" href="https://www.chowtaifook.com/zh-hk/eshop/realtime-gold-price.html" target="_blank" rel="noopener" data-i18n="ctfLinkText" style="margin-top:16px;">查看官网今日金价 →</a>
-            <div class="price-placeholder" style="text-align:center; margin-top:14px;">
-              <span data-i18n="ctfCannotShow">周大福香港实时金价无法展示，请点击链接获取</span>
-            </div>
-          </div>
-
-          <div class="card fx-card">
-            <div class="eyebrow"><span data-i18n="fxRateTitle">人民币 / 港元 实时汇率</span><span class="src-tag" id="srcFxRate">--</span></div>
-            <div class="fx-row">
-              <div class="fx-side">
-                <span class="fx-flag">🇭🇰</span>
-                <div class="fx-amount">1</div>
-                <div class="fx-code">HKD</div>
-              </div>
-              <div class="fx-equals">=</div>
-              <div class="fx-side">
-                <span class="fx-flag">🇨🇳</span>
-                <div class="fx-amount num" id="fxRateDisplay">--</div>
-                <div class="fx-code">CNY</div>
-              </div>
-            </div>
-            <div class="price-meta" id="fxRateMeta" style="text-align:center;"></div>
-          </div>
-        </div>
-
         <div class="alert-banner-title"><span class="icon">💰</span><span data-i18n="priceWarnTitle">售价预警</span><span class="alert-banner-hint" data-i18n="priceWarnHint">采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格</span></div>
         <div class="card panel">
           <div class="form-grid" style="margin-bottom:14px;">
@@ -549,6 +494,61 @@
           <div id="rwWarningBox" class="price-placeholder" style="padding:12px 14px; border-radius:10px; margin-bottom:10px;"></div>
           <div id="rwSuggestReason" class="price-placeholder" style="padding:10px 14px; border-radius:10px; font-size:12px;"></div>
         </div>
+        </div>
+
+        <div class="section-title"><span data-i18n="homePriceTitle">实时金价</span> <span class="hint"><span data-i18n="homePriceHint">数据来源：东方财富网 · 每 10 秒自动刷新</span> · <span data-i18n="priceDelayNote">（数据延迟，仅作参考）</span></span></div>
+        <div class="price-grid" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="card price-card">
+            <div class="eyebrow"><span data-i18n="cardSgeEyebrow">上海黄金交易所 · Au9999</span><span class="src-tag" id="srcSge">东方财富</span></div>
+            <h3 data-i18n="cardSgeTitle">上交所金价</h3>
+            <div><span class="price-main num" id="priceSge">--</span><span class="price-unit" data-i18n="unitYuanGram">元/克</span></div>
+            <span class="price-change" id="changeSge"></span>
+            <div class="converted" style="margin-top:12px;">
+              <div class="k" data-i18n="convertedHkdLabel">折合港元/克</div>
+              <div class="v num" id="priceSgeHkd">--</div>
+            </div>
+            <div class="price-meta"><span data-i18n="updatedAt">更新时间</span> <span id="metaSge">--</span></div>
+          </div>
+
+          <div class="card price-card">
+            <div class="eyebrow"><span data-i18n="cardLondonEyebrow">伦敦金 · 国际金价参考</span><span class="src-tag" id="srcLondon">东方财富</span></div>
+            <h3 data-i18n="cardLondonTitle">伦敦金（换算 元/克）</h3>
+            <div><span class="price-main num" id="priceLondon">--</span><span class="price-unit" data-i18n="unitYuanGram">元/克</span></div>
+            <div class="price-meta num" id="metaLondonUsd">-- <span data-i18n="unitUsdOz">美元/盎司</span></div>
+            <div class="converted" style="margin-top:12px;">
+              <div class="k" data-i18n="convertedHkdLabel">折合港元/克</div>
+              <div class="v num" id="priceLondonHkd">--</div>
+            </div>
+            <div class="price-meta"><span data-i18n="updatedAt">更新时间</span> <span id="metaLondon">--</span></div>
+          </div>
+        </div>
+
+        <div class="price-grid" style="grid-template-columns: 1fr 1fr; margin-top:14px;">
+          <div class="card ctf-link-card">
+            <div class="eyebrow"><span data-i18n="ctfLinkEyebrow">周大福（香港）· 品牌金价</span></div>
+            <a class="ctf-link-btn" href="https://www.chowtaifook.com/zh-hk/eshop/realtime-gold-price.html" target="_blank" rel="noopener" data-i18n="ctfLinkText" style="margin-top:16px;">查看官网今日金价 →</a>
+            <div class="price-placeholder" style="text-align:center; margin-top:14px;">
+              <span data-i18n="ctfCannotShow">周大福香港实时金价无法展示，请点击链接获取</span>
+            </div>
+          </div>
+
+          <div class="card fx-card">
+            <div class="eyebrow"><span data-i18n="fxRateTitle">人民币 / 港元 实时汇率</span><span class="src-tag" id="srcFxRate">--</span></div>
+            <div class="fx-row">
+              <div class="fx-side">
+                <span class="fx-flag">🇭🇰</span>
+                <div class="fx-amount">1</div>
+                <div class="fx-code">HKD</div>
+              </div>
+              <div class="fx-equals">=</div>
+              <div class="fx-side">
+                <span class="fx-flag">🇨🇳</span>
+                <div class="fx-amount num" id="fxRateDisplay">--</div>
+                <div class="fx-code">CNY</div>
+              </div>
+            </div>
+            <div class="price-meta" id="fxRateMeta" style="text-align:center;"></div>
+          </div>
         </div>
 
         <div class="section-title"><span data-i18n="homeKpiTitle">经营概览</span> <span class="hint" data-i18n="homeKpiHint">基于本地演示数据计算</span></div>
