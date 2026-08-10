@@ -204,6 +204,15 @@
     margin-top:5px; font-size:11px; color: var(--accent-dark); background:var(--accent-soft); border:none;
     padding:3px 8px; border-radius:6px; cursor:pointer;
   }
+  .ctf-price-field label{
+    color: var(--accent-dark); font-weight:800; font-size:12.5px;
+  }
+  .ctf-price-field input{
+    border:2px solid var(--accent); background: var(--accent-soft); font-weight:700; font-size:15px; color: var(--accent-dark);
+    padding:9px 10px;
+  }
+  .ctf-price-field input:focus{ border-color: var(--accent-dark); box-shadow: 0 0 0 3px rgba(169,124,59,0.18); }
+  .ctf-price-field input::placeholder{ color: var(--accent-dark); opacity:0.55; font-weight:500; }
   .form-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:14px; }
   .profit-highlight{
     margin-top:16px; padding:16px 20px; border-radius:12px;
@@ -414,7 +423,7 @@
               <label data-i18n="fieldProduct">商品规格</label>
               <select id="pwProduct"></select>
             </div>
-            <div class="field">
+            <div class="field ctf-price-field">
               <label data-i18n="fieldCtfManualPrice">周大福香港官网金价（手动填写，港元/克）</label>
               <input type="number" id="pwCtfPrice" data-i18n-ph="phCtfManualPrice" placeholder="请到官网查看后手动填写" step="0.01">
             </div>
@@ -1890,7 +1899,14 @@
       const sel = $(id);
       const current = sel.value;
       sel.innerHTML = products.map(p => '<option value="'+p.name+'">'+p.name+'</option>').join('');
-      if (current) sel.value = current;
+      if (current && products.some(p => p.name === current)){
+        sel.value = current;
+      } else if (id === 'pwProduct' || id === 'rwProduct'){
+        // Home page price/recycle warnings default to the 10g spec rather than whichever
+        // product happens to be listed first.
+        const tenGram = products.find(p => /10\s*g/i.test(p.name));
+        if (tenGram) sel.value = tenGram.name;
+      }
     });
   }
 
