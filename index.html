@@ -548,11 +548,19 @@
 
         <div class="price-grid" style="grid-template-columns: 1fr 1fr; margin-top:14px;">
           <div class="card ctf-link-card">
-            <div class="eyebrow"><span data-i18n="ctfLinkEyebrow">周大福（香港）· 品牌金价</span></div>
-            <a class="ctf-link-btn" href="https://www.chowtaifook.com/zh-hk/eshop/realtime-gold-price.html" target="_blank" rel="noopener" data-i18n="ctfLinkText" style="margin-top:16px;">查看官网今日金价 →</a>
-            <div class="price-placeholder" style="text-align:center; margin-top:14px;">
-              <span data-i18n="ctfCannotShow">周大福香港实时金价无法展示，请点击链接获取</span>
+            <div class="eyebrow" style="width:100%;"><span data-i18n="ctfLinkEyebrow">周大福（香港）· 品牌金价</span><span class="src-tag" id="srcCtf">--</span></div>
+            <div style="display:flex; gap:28px; justify-content:center; margin-top:14px; width:100%;">
+              <div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:4px;" data-i18n="ctfSellLabel">金粒賣出價（港元/克）</div>
+                <div class="v num" id="ctfSellDisplay" style="font-size:23px;font-weight:800;color:var(--ink);">--</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:4px;" data-i18n="ctfBuyLabel">金粒買入價（港元/克）</div>
+                <div class="v num" id="ctfBuyDisplay" style="font-size:23px;font-weight:800;color:var(--ink);">--</div>
+              </div>
             </div>
+            <div class="price-meta" id="ctfMeta" style="text-align:center;margin-top:10px;"></div>
+            <a class="ctf-link-btn" href="https://www.chowtaifook.com/zh-hk/eshop/realtime-gold-price.html" target="_blank" rel="noopener" data-i18n="ctfLinkText" style="margin-top:14px;">查看官网今日金价 →</a>
           </div>
 
           <div class="card fx-card">
@@ -1089,6 +1097,7 @@
       cardCtfEyebrow:'周大福（香港）· 今日金价', cardCtfTitle:'港式品牌金价',
       ctfNeedKey:'需要配置「极速数据」授权 KEY 才能显示。前往「系统管理 → 参数设置」配置。', ctfRegister:'免费注册 →',
       ctfLinkTitle:'周大福香港金价链接', ctfLinkEyebrow:'周大福（香港）· 品牌金价', ctfCannotShow:'周大福香港实时金价无法展示，请点击链接获取', ctfLinkText:'查看官网今日金价 →',
+      ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'周大福官网',
       ctfIframeHint:'如果上方显示空白，说明周大福官网出于安全策略禁止被其他网站内嵌（这是电商网站的常见做法，用于防止点击劫持），此时请使用上面的链接在新页面查看。',
       fxRateTitle:'人民币 / 港元 实时汇率', fxRateUnit:'1 人民币 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'数据来源',
       priceWarnTitle:'售价预警', priceWarnHint:'采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格',
@@ -1202,6 +1211,7 @@
       cardCtfEyebrow:'周大福（香港）· 今日金價', cardCtfTitle:'港式品牌金價',
       ctfNeedKey:'需要設定「極速數據」授權 KEY 才能顯示。請到「系統管理 → 參數設定」設定。', ctfRegister:'免費註冊 →',
       ctfLinkTitle:'周大福香港金價連結', ctfLinkEyebrow:'周大福（香港）· 品牌金價', ctfCannotShow:'周大福香港即時金價無法顯示，請點擊連結獲取', ctfLinkText:'查看官網今日金價 →',
+      ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'周大福官網',
       ctfIframeHint:'如果上方顯示空白，代表周大福官網基於安全策略禁止被其他網站內嵌（這是電商網站的常見做法，用於防止點擊劫持），此時請使用上面的連結在新頁面查看。',
       fxRateTitle:'人民幣 / 港元 即時匯率', fxRateUnit:'1 人民幣 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'資料來源',
       priceWarnTitle:'售價預警', priceWarnHint:'採購價 + 採購價 × 6% = 最低售價，不能高於周大福香港官網價格',
@@ -1314,6 +1324,7 @@
       cardCtfEyebrow:'Chow Tai Fook (HK) · Today\u2019s Price', cardCtfTitle:'HK Brand Gold Price',
       ctfNeedKey:'Requires a "Jisuapi" APPKEY to display. Configure it under System → Parameters.', ctfRegister:'Register free →',
       ctfLinkTitle:'Chow Tai Fook HK Gold Price Link', ctfLinkEyebrow:'Chow Tai Fook (HK) \u00b7 Brand Price', ctfCannotShow:'Chow Tai Fook HK live gold price can\u2019t be shown here \u2014 use the link below', ctfLinkText:'View today\u2019s price (official site) →',
+      ctfSellLabel:'Gold Pellet Sell (HKD/g)', ctfBuyLabel:'Gold Pellet Buy (HKD/g)', srcCtfOfficial:'Chow Tai Fook official site',
       ctfIframeHint:'If the box above is blank, Chow Tai Fook\u2019s site is blocking embedding for security reasons (standard practice for e-commerce sites, to prevent clickjacking) \u2014 use the link above to open it in a new page instead.',
       fxRateTitle:'CNY / HKD Live Exchange Rate', fxRateUnit:'1 CNY = ? HKD', unitHkdLabel:'HKD (HKD)', dataSourceLabel:'Data source',
       priceWarnTitle:'Selling Price Alert', priceWarnHint:'Purchase price + purchase price \u00d7 6% = minimum selling price, must not be above Chow Tai Fook HK\u2019s official price',
@@ -1732,8 +1743,17 @@
           products.forEach(p => setRecycleManualPrice(p.name, ctfBuyPriceGlobal));
           if (document.activeElement !== $('rwPrice')) $('rwPrice').value = ctfBuyPriceGlobal;
         }
+        $('ctfSellDisplay').textContent = ctfSellPriceGlobal != null ? ('HK$' + fmtNum(ctfSellPriceGlobal, 2)) : '--';
+        $('ctfBuyDisplay').textContent = ctfBuyPriceGlobal != null ? ('HK$' + fmtNum(ctfBuyPriceGlobal, 2)) : '--';
+        $('srcCtf').textContent = t('srcCtfOfficial');
+        $('ctfMeta').textContent = t('updatedAt') + ' ' + (ctf.updateDate || new Date().toLocaleTimeString('zh-CN',{hour12:false}));
+      } else {
+        $('srcCtf').textContent = t('srcUnavailable');
       }
-    }catch(e){ console.warn('[CTF price] fetch failed:', e.message || e); }
+    }catch(e){
+      console.warn('[CTF price] fetch failed:', e.message || e);
+      $('srcCtf').textContent = t('srcUnavailable');
+    }
 
     // SGE (上交所金价) — 优先走自己的后端中转（/api/price3，同源无跨域问题），
     // 其次尝试直连第三方接口（本地测试或未部署后端时），最后退回东方财富备用
