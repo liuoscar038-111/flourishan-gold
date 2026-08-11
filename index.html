@@ -518,7 +518,7 @@
         </div>
         </div>
 
-        <div class="section-title"><span data-i18n="homePriceTitle">实时金价</span> <span class="hint"><span data-i18n="homePriceHint">数据来源：东方财富网 · 每 10 秒自动刷新</span> · <span data-i18n="priceDelayNote">（数据延迟，仅作参考）</span></span></div>
+        <div class="section-title"><span data-i18n="homePriceTitle">实时金价</span> <span class="hint"><span data-i18n="homePriceHint">数据来源：东方财富网 · 每 20 秒自动刷新</span> · <span data-i18n="priceDelayNote">（数据延迟，仅作参考）</span></span></div>
         <div class="price-grid" style="grid-template-columns: repeat(2, 1fr);">
           <div class="card price-card">
             <div class="eyebrow"><span data-i18n="cardSgeEyebrow">上海黄金交易所 · Au9999</span><span class="src-tag" id="srcSge">东方财富</span></div>
@@ -1082,7 +1082,7 @@
       loginBtn:'登录', loginHintText:'如果忘记密码，请联系管理员重置。', logoutBtn:'退出登录',
       accountSectionTitle:'登录账号设置', fieldNewUsername:'账号', fieldNewPassword:'新密码', phKeepCurrent:'留空则不修改',
       alertAccountSaved:'账号设置已保存', alertUsernameRequired:'账号不能为空',
-      homePriceTitle:'实时金价', homePriceHint:'数据来源：东方财富网 · 每 10 秒自动刷新', priceDelayNote:'（数据延迟，仅作参考）',
+      homePriceTitle:'实时金价', homePriceHint:'数据来源：东方财富网 · 每 20 秒自动刷新', priceDelayNote:'（数据延迟，仅作参考）',
       cardSgeEyebrow:'上海黄金交易所 · Au9999', cardSgeTitle:'上交所金价', unitYuanGram:'元/克', updatedAt:'更新时间', convertedHkdLabel:'折合港元/克',
       cardLondonEyebrow:'伦敦金 · 国际金价参考', cardLondonTitle:'伦敦金（换算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金价', cardCtfTitle:'港式品牌金价',
@@ -1195,7 +1195,7 @@
       loginBtn:'登入', loginHintText:'如果忘記密碼，請聯繫管理員重設。', logoutBtn:'登出',
       accountSectionTitle:'登入帳號設定', fieldNewUsername:'帳號', fieldNewPassword:'新密碼', phKeepCurrent:'留空則不修改',
       alertAccountSaved:'帳號設定已儲存', alertUsernameRequired:'帳號不能為空',
-      homePriceTitle:'即時金價', homePriceHint:'資料來源：東方財富網 · 每 10 秒自動更新', priceDelayNote:'（資料延遲，僅供參考）',
+      homePriceTitle:'即時金價', homePriceHint:'資料來源：東方財富網 · 每 20 秒自動更新', priceDelayNote:'（資料延遲，僅供參考）',
       cardSgeEyebrow:'上海黃金交易所 · Au9999', cardSgeTitle:'上交所金價', unitYuanGram:'元/克', updatedAt:'更新時間', convertedHkdLabel:'折合港元/克',
       cardLondonEyebrow:'倫敦金 · 國際金價參考', cardLondonTitle:'倫敦金（換算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金價', cardCtfTitle:'港式品牌金價',
@@ -1307,7 +1307,7 @@
       loginBtn:'Log in', loginHintText:'Demo default — username: admin, password: admin123 (manage under System \u2192 Staff Accounts)', logoutBtn:'Log out',
       accountSectionTitle:'Login Account', fieldNewUsername:'Username', fieldNewPassword:'New password', phKeepCurrent:'Leave blank to keep unchanged',
       alertAccountSaved:'Account settings saved', alertUsernameRequired:'Username cannot be empty',
-      homePriceTitle:'Live Gold Prices', homePriceHint:'Source: Eastmoney · auto-refresh every 10s', priceDelayNote:'(Delayed data, for reference only)',
+      homePriceTitle:'Live Gold Prices', homePriceHint:'Source: Eastmoney · auto-refresh every 20s', priceDelayNote:'(Delayed data, for reference only)',
       cardSgeEyebrow:'Shanghai Gold Exchange · Au9999', cardSgeTitle:'SGE Price', unitYuanGram:'CNY/g', updatedAt:'Updated', convertedHkdLabel:'Converted HKD/g',
       cardLondonEyebrow:'London Gold · Intl. reference', cardLondonTitle:'London Gold (converted CNY/g)', unitUsdOz:'USD/oz',
       cardCtfEyebrow:'Chow Tai Fook (HK) · Today\u2019s Price', cardCtfTitle:'HK Brand Gold Price',
@@ -1654,7 +1654,7 @@
 
   /* ============ Gold price sources (东方财富网 for SGE + London; 极速数据 for 周大福 HK) ============ */
   const OZ_TO_G = 31.1035;
-  const TIMEOUT_MS = 6500;
+  const TIMEOUT_MS = 9000;
 
   async function fetchJson(url){
     const controller = new AbortController();
@@ -2816,7 +2816,7 @@
     renderRecycleWarning(true);
     applyLang(currentLang);
     refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); });
-    setInterval(() => { refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); }); }, 10000);
+    setInterval(() => { refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); }); }, 20000);
     // Periodically refresh shared data from the database so changes made by
     // teammates on other devices eventually show up here too.
     setInterval(async () => {
