@@ -432,7 +432,7 @@
         <div class="alert-banner-title"><span class="icon">💰</span><span data-i18n="priceWarnTitle">售价预警</span><span class="alert-banner-hint" data-i18n="priceWarnHint">采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格</span></div>
         <div class="card panel">
           <div class="form-grid" style="margin-bottom:14px;">
-            <div class="field">
+            <div class="field" style="display:none;">
               <label data-i18n="fieldProduct">商品规格</label>
               <select id="pwProduct"></select>
             </div>
@@ -479,7 +479,7 @@
         </div>
         <div class="card panel">
           <div class="form-grid" style="margin-bottom:14px;">
-            <div class="field">
+            <div class="field" style="display:none;">
               <label data-i18n="fieldProduct">商品规格</label>
               <select id="rwProduct"></select>
             </div>
@@ -494,7 +494,7 @@
             <div class="field" style="align-self:flex-end;"><button class="btn btn-primary" id="rwSave" data-i18n="btnSave" style="width:100%;">保存</button></div>
           </div>
 
-          <div class="price-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom:14px;">
+          <div class="price-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom:14px;">
             <div class="kpi-card" style="border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
               <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;">
                 <span data-i18n="pwLatestCostLabel">最新采购单价</span><span id="rwCostMarkupSuffix"></span>
@@ -505,6 +505,7 @@
               <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="rwRecycleRef">周大福回收金价（手动，港元/克）</div>
               <div class="v num" id="rwPriceDisplay" style="font-size:19px;font-weight:700;">--</div>
             </div>
+            <div aria-hidden="true" style="visibility:hidden;"></div>
             <div class="kpi-card kpi-card-accent kpi-card-recycle">
               <div class="k" data-i18n="rwSuggestedPrice">建议回收价（港元/克，整数）</div>
               <div class="v num" id="rwSuggestDisplay">--</div>
@@ -1778,7 +1779,7 @@
       // Live CNY/HKD rate display on the home page — shown as 1 CNY = ? HKD, which is the
       // inverse of hkdCnyRateGlobal (which is stored/used internally as "1 HKD = ? CNY").
       if (hkdCnyRateGlobal){
-        $('fxRateDisplay').textContent = fmtNum(1 / hkdCnyRateGlobal, 4);
+        $('fxRateDisplay').textContent = fmtNum(1 / hkdCnyRateGlobal, 5);
         $('srcFxRate').textContent = hkdRateSourceGlobal || t('srcMarketRate');
         $('fxRateMeta').textContent = t('dataSourceLabel') + '：' + (hkdRateSourceGlobal || t('srcMarketRate')) + ' · ' + t('updatedAt') + ' ' + new Date().toLocaleTimeString('zh-CN',{hour12:false});
       } else {
@@ -1864,7 +1865,7 @@
     const totalHkd = total ? fromCnyAmount(toCnyAmount(total, currency), 'HKD') : null;
     $('pTotalHkdDisplay').textContent = total ? (totalHkd !== null ? ('HK$' + fmtNum(totalHkd, 2)) : t('profitNA')) : '--';
     if (total && totalHkd !== null && hkdCnyRateGlobal){
-      $('pTotalHkdSource').textContent = t('dataSourceLabel') + '：' + (hkdRateSourceGlobal || t('srcMarketRate')) + ' · 1 HKD ≈ ' + fmtNum(hkdCnyRateGlobal, 4) + ' CNY';
+      $('pTotalHkdSource').textContent = t('dataSourceLabel') + '：' + (hkdRateSourceGlobal || t('srcMarketRate')) + ' · 1 HKD ≈ ' + fmtNum(hkdCnyRateGlobal, 5) + ' CNY';
     } else {
       $('pTotalHkdSource').textContent = '';
     }
@@ -2564,7 +2565,7 @@
   function loadSystemParamsIntoForm(){
     $('cfgJisuKey').value = getJisuKey();
     $('cfgHkdRateOverride').value = getHkdRateOverride() || '';
-    $('cfgHkdRate').value = hkdCnyRateGlobal ? ('1 HKD ≈ ' + hkdCnyRateGlobal.toFixed(4) + ' CNY (' + (hkdRateSourceGlobal || t('srcMarketRate')) + ')') : t('autoRateNotAvailable');
+    $('cfgHkdRate').value = hkdCnyRateGlobal ? ('1 HKD ≈ ' + hkdCnyRateGlobal.toFixed(5) + ' CNY (' + (hkdRateSourceGlobal || t('srcMarketRate')) + ')') : t('autoRateNotAvailable');
   }
   $('cfgJisuSave').addEventListener('click', () => {
     const v = $('cfgJisuKey').value.trim();
