@@ -432,7 +432,7 @@
         <div class="alert-banner-title"><span class="icon">💰</span><span data-i18n="priceWarnTitle">售价预警</span><span class="alert-banner-hint" data-i18n="priceWarnHint">采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格</span></div>
         <div class="card panel">
           <div class="form-grid" style="margin-bottom:14px;">
-            <div class="field" style="display:none;">
+            <div class="field">
               <label data-i18n="fieldProduct">商品规格</label>
               <select id="pwProduct"></select>
             </div>
@@ -458,7 +458,10 @@
               <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwMinSell">我们的最低售价（+6%，港元/克）</div>
               <div class="v num" id="pwMinSellDisplay" style="font-size:19px;font-weight:700;">--</div>
             </div>
-            <div aria-hidden="true" style="visibility:hidden;"></div>
+            <div class="kpi-card" style="border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+              <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwCtfRef">周大福香港价格（手动，港元/克）</div>
+              <div class="v num" id="pwCtfDisplay" style="font-size:19px;font-weight:700;">--</div>
+            </div>
             <div class="kpi-card kpi-card-accent">
               <div class="k" data-i18n="pwSuggestedPrice">建议售价（港元/克，整数）</div>
               <div class="v num" id="pwSuggestDisplay">--</div>
@@ -476,7 +479,7 @@
         </div>
         <div class="card panel">
           <div class="form-grid" style="margin-bottom:14px;">
-            <div class="field" style="display:none;">
+            <div class="field">
               <label data-i18n="fieldProduct">商品规格</label>
               <select id="rwProduct"></select>
             </div>
@@ -2339,6 +2342,7 @@
     if (sgeHkd === null){
       $('pwCostDisplay').textContent = '--';
       $('pwMinSellDisplay').textContent = '--';
+      $('pwCtfDisplay').textContent = (savedPrice != null) ? ('HK$'+fmtNum(savedPrice,2)) : '--';
       $('pwSuggestDisplay').textContent = '--';
       box.className = 'price-placeholder pw-neutral';
       box.textContent = t('pwRateUnavailable');
@@ -2353,12 +2357,15 @@
     $('pwMinSellDisplay').textContent = 'HK$' + fmtNum(minSellHkd, 2);
 
     if (savedPrice == null){
+      $('pwCtfDisplay').textContent = '--';
       $('pwSuggestDisplay').textContent = 'HK$' + Math.ceil(minSellHkd);
       box.className = 'price-placeholder pw-neutral';
       box.textContent = t('pwNeedManualPrice');
       reasonBox.textContent = '';
       return;
     }
+
+    $('pwCtfDisplay').textContent = 'HK$' + fmtNum(savedPrice, 2);
 
     // Suggested selling price — rule: 建议售价 = 周大福香港官网金价 × (1 − 价格下调幅度%).
     // No clamping/ceiling here — it varies freely and directly with the edge%, so it keeps
