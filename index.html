@@ -812,12 +812,11 @@
           <div class="accordion-content" id="acc-fx" style="display:none;">
             <div class="card form-card">
               <div class="form-grid">
-                <div class="field"><label data-i18n="fieldJuheFxKey">聚合数据 汇率 APPKEY（可选，更权威）</label><input type="text" id="cfgJuheFxKey" data-i18n-ph="phJuheFxKey" placeholder="留空则自动尝试中国银行官网"></div>
                 <div class="field"><label data-i18n="fieldAutoRate">当前汇率（自动获取）</label><input type="text" id="cfgHkdRate" disabled></div>
                 <div class="field"><label data-i18n="fieldRateOverride">手动覆盖（选填）</label><input type="number" id="cfgHkdRateOverride" data-i18n-ph="phRateOverride" placeholder="留空则用自动汇率" step="0.0001"></div>
                 <div class="field" style="align-self:flex-end;"><button class="btn btn-primary" id="cfgHkdSave" data-i18n="btnSave" style="width:100%;">保存</button></div>
               </div>
-              <div class="hint" style="font-size:11px;color:var(--muted);margin-top:8px;" data-i18n="paramsHkdHint">自动汇率优先级：① 聚合数据银行牌价（需 APPKEY，免费注册：<a href="https://www.juhe.cn/docs/api/id/23" target="_blank" rel="noopener" style="color:var(--accent-dark);">juhe.cn</a>，100次/天）② 中国银行官网抓取 ③ 市场汇率估算兜底。用于将港元销售额折算为人民币，计入首页"今日销售额"汇总。注意：聚合数据这条线路是 HTTP 接口，如果本页面部署在 HTTPS 网站上会被浏览器"混合内容"策略拦截，仅在本地打开或 HTTP 环境下生效。</div>
+              <div class="hint" style="font-size:11px;color:var(--muted);margin-top:8px;" data-i18n="paramsHkdHint">自动汇率优先级：① 中银香港官网抓取 ② 中国银行官网抓取 ③ 市场汇率估算兜底。用于将港元销售额折算为人民币，计入首页"今日销售额"汇总。</div>
             </div>
           </div>
         </div>
@@ -1156,7 +1155,7 @@
       phJisuKey:'留空则首页显示"需配置数据源"', btnSave:'保存',
       paramsCtfHint:'免费注册：<a href="https://www.jisuapi.com/api/gold/" target="_blank" rel="noopener" style="color:var(--accent-dark);">jisuapi.com</a>（免费额度 100 次/天）。上交所与伦敦金数据固定使用东方财富网，无需配置。',
       paramsHkdTitle:'港元 / 人民币 参考汇率', fieldAutoRate:'当前汇率（自动获取）', fieldRateOverride:'手动覆盖（选填）', phRateOverride:'留空则用自动汇率',
-      paramsHkdHint:'自动汇率优先级：① 聚合数据银行牌价（需 APPKEY，免费注册：<a href="https://www.juhe.cn/docs/api/id/23" target="_blank" rel="noopener" style="color:var(--accent-dark);">juhe.cn</a>，100次/天）② 中国银行官网抓取 ③ 市场汇率估算兜底。用于将港元销售额折算为人民币，计入首页"今日销售额"汇总。注意：聚合数据这条线路是 HTTP 接口，如果本页面部署在 HTTPS 网站上会被浏览器"混合内容"策略拦截，仅在本地打开或 HTTP 环境下生效。',
+      paramsHkdHint:'自动汇率优先级：① 中银香港官网抓取 ② 中国银行官网抓取 ③ 市场汇率估算兜底。用于将港元销售额折算为人民币，计入首页"今日销售额"汇总。',
       paramsUnitTitle:'计量单位换算参考', thUnit:'单位', thUnitToGram:'换算为克(g)',
       unitLiangCn:'1 市两（大陆）', unitLiangCnNote:'内地黄金行业惯用换算', unitLiangHk:'1 两（港）', unitLiangHkNote:'港式金店惯用换算',
       unitOz:'1 盎司（oz）', unitOzNote:'国际金衡制换算', unitCarat:'1 克拉（ct，仅宝石计重）', unitCaratNote:'不用于黄金克重，仅供参考',
@@ -1171,9 +1170,8 @@
       thOrderCount:'单据数', btnExportCsv:'导出为 CSV',
       salesReportTitle:'销售汇总（按商品规格）', customerRankTitle:'客户销售排行（Top 10）', thRank:'排名',
       // dynamic strings
-      srcEastmoney:'东方财富', srcJisu:'极速数据', srcUnavailable:'暂不可用', srcNotConfigured:'未配置', srcBoc:'中国银行', srcBochk:'中银香港', srcJuheFx:'聚合数据（银行牌价）', srcMarketRate:'市场汇率（备用）', srcZhlsy:'粤鹏金数据接口', srcFallbackSuffix:'（备用）',
-      fieldJuheFxKey:'聚合数据 汇率 APPKEY（可选，更权威）', phJuheFxKey:'留空则自动尝试中国银行官网',
-      btnDelete:'删除', btnDeleteSpec:'删除规格', btnDisable:'禁用', btnEnable:'启用', statusEnabled:'启用', statusDisabled:'已禁用',
+      srcEastmoney:'东方财富', srcJisu:'极速数据', srcUnavailable:'暂不可用', srcNotConfigured:'未配置', srcBoc:'中国银行', srcBochk:'中银香港', srcMarketRate:'市场汇率（备用）', srcZhlsy:'粤鹏金数据接口', srcFallbackSuffix:'（备用）',
+            btnDelete:'删除', btnDeleteSpec:'删除规格', btnDisable:'禁用', btnEnable:'启用', statusEnabled:'启用', statusDisabled:'已禁用',
       statusOutOfStock:'缺货', statusLowStock:'库存偏低', statusNormal:'正常',
       chartEmptyHint:'近 7 日暂无销售记录', unconvertedHkdPrefix:'另有 ', unconvertedHkdSuffix:'港元（HKD）未换算（缺汇率）',
       unconvertedCnyPrefix:'另有 ', unconvertedCnySuffix:'元（RMB）未换算（缺汇率）',
@@ -1270,7 +1268,7 @@
       phJisuKey:'留空則首頁顯示"需設定資料來源"', btnSave:'儲存',
       paramsCtfHint:'免費註冊：<a href="https://www.jisuapi.com/api/gold/" target="_blank" rel="noopener" style="color:var(--accent-dark);">jisuapi.com</a>（免費額度 100 次/天）。上交所與倫敦金資料固定使用東方財富網，無需設定。',
       paramsHkdTitle:'港元 / 人民幣 參考匯率', fieldAutoRate:'目前匯率（自動取得）', fieldRateOverride:'手動覆蓋（選填）', phRateOverride:'留空則用自動匯率',
-      paramsHkdHint:'自動匯率優先順序：① 聚合數據銀行牌價（需 APPKEY，免費註冊：<a href="https://www.juhe.cn/docs/api/id/23" target="_blank" rel="noopener" style="color:var(--accent-dark);">juhe.cn</a>，100次/天）② 中國銀行官網抓取 ③ 市場匯率估算墊底。用於將港元銷售額折算為人民幣，計入首頁"今日銷售額"彙總。注意：聚合數據這條線路是 HTTP 介面，如果本頁面部署在 HTTPS 網站上會被瀏覽器"混合內容"策略攔截，僅在本地開啟或 HTTP 環境下生效。',
+      paramsHkdHint:'自動匯率優先順序：① 中銀香港官網抓取 ② 中國銀行官網抓取 ③ 市場匯率估算墊底。用於將港元銷售額折算為人民幣，計入首頁"今日銷售額"彙總。',
       paramsUnitTitle:'計量單位換算參考', thUnit:'單位', thUnitToGram:'換算為克(g)',
       unitLiangCn:'1 市兩（大陸）', unitLiangCnNote:'內地黃金行業慣用換算', unitLiangHk:'1 兩（港）', unitLiangHkNote:'港式金店慣用換算',
       unitOz:'1 盎司（oz）', unitOzNote:'國際金衡制換算', unitCarat:'1 克拉（ct，僅寶石計重）', unitCaratNote:'不用於黃金克重，僅供參考',
@@ -1284,9 +1282,8 @@
       purchaseReportTitle:'採購彙總（按商品規格）', thPurchaseWeight:'採購克重(g)', thPurchaseAmount:'採購金額（折合港元HKD）', thSalesAmountHkd:'銷售金額（折合港元HKD）',
       thOrderCount:'單據數', btnExportCsv:'匯出為 CSV',
       salesReportTitle:'銷售彙總（按商品規格）', customerRankTitle:'客戶銷售排行（Top 10）', thRank:'排名',
-      srcEastmoney:'東方財富', srcJisu:'極速數據', srcUnavailable:'暫不可用', srcNotConfigured:'未設定', srcBoc:'中國銀行', srcBochk:'中銀香港', srcJuheFx:'聚合數據（銀行牌價）', srcMarketRate:'市場匯率（備用）', srcZhlsy:'粵鵬金數據介面', srcFallbackSuffix:'（備用）',
-      fieldJuheFxKey:'聚合數據 匯率 APPKEY（可選，更權威）', phJuheFxKey:'留空則自動嘗試中國銀行官網',
-      btnDelete:'刪除', btnDeleteSpec:'刪除規格', btnDisable:'停用', btnEnable:'啟用', statusEnabled:'啟用', statusDisabled:'已停用',
+      srcEastmoney:'東方財富', srcJisu:'極速數據', srcUnavailable:'暫不可用', srcNotConfigured:'未設定', srcBoc:'中國銀行', srcBochk:'中銀香港', srcMarketRate:'市場匯率（備用）', srcZhlsy:'粵鵬金數據介面', srcFallbackSuffix:'（備用）',
+            btnDelete:'刪除', btnDeleteSpec:'刪除規格', btnDisable:'停用', btnEnable:'啟用', statusEnabled:'啟用', statusDisabled:'已停用',
       statusOutOfStock:'缺貨', statusLowStock:'庫存偏低', statusNormal:'正常',
       chartEmptyHint:'近 7 日暫無銷售記錄', unconvertedHkdPrefix:'另有 ', unconvertedHkdSuffix:'港元（HKD）未換算（缺匯率）',
       unconvertedCnyPrefix:'另有 ', unconvertedCnySuffix:'元（RMB）未換算（缺匯率）',
@@ -1383,7 +1380,7 @@
       phJisuKey:'Leave blank to show "not configured" on Home', btnSave:'Save',
       paramsCtfHint:'Register free at <a href="https://www.jisuapi.com/api/gold/" target="_blank" rel="noopener" style="color:var(--accent-dark);">jisuapi.com</a> (100 free calls/day). SGE & London prices always use Eastmoney — no key needed.',
       paramsHkdTitle:'HKD / CNY Reference Rate', fieldAutoRate:'Current rate (auto)', fieldRateOverride:'Manual override (optional)', phRateOverride:'Leave blank to use auto rate',
-      paramsHkdHint:'Auto-rate priority: \u2460 Juhe bank-rate API (needs a free APPKEY from <a href="https://www.juhe.cn/docs/api/id/23" target="_blank" rel="noopener" style="color:var(--accent-dark);">juhe.cn</a>, 100 calls/day) \u2461 Bank of China\u2019s site (scraped) \u2461 market-rate estimate as a last resort. Used to convert HKD sales into CNY on the Home summary. Note: the Juhe endpoint is HTTP-only, so it will be blocked by mixed-content policy if this page is hosted over HTTPS \u2014 it mainly helps when opened locally or over HTTP.',
+      paramsHkdHint:'Auto-rate priority: \u2460 BOC (Hong Kong) site (scraped) \u2461 Bank of China\u2019s site (scraped) \u2462 market-rate estimate as a last resort. Used to convert HKD sales into CNY on the Home summary.',
       paramsUnitTitle:'Unit Conversion Reference', thUnit:'Unit', thUnitToGram:'Grams(g)',
       unitLiangCn:'1 Mainland tael', unitLiangCnNote:'Common in mainland gold trade', unitLiangHk:'1 HK tael', unitLiangHkNote:'Common in HK jewellery stores',
       unitOz:'1 troy ounce (oz)', unitOzNote:'International standard', unitCarat:'1 carat (ct, gems only)', unitCaratNote:'Not used for gold weight — reference only',
@@ -1397,9 +1394,8 @@
       purchaseReportTitle:'Purchase Summary (by product)', thPurchaseWeight:'Purchased Weight(g)', thPurchaseAmount:'Purchase Amount (HKD)', thSalesAmountHkd:'Sales Amount (HKD)',
       thOrderCount:'Orders', btnExportCsv:'Export CSV',
       salesReportTitle:'Sales Summary (by product)', customerRankTitle:'Top Customers (Top 10)', thRank:'Rank',
-      srcEastmoney:'Eastmoney', srcJisu:'Jisuapi', srcUnavailable:'Unavailable', srcNotConfigured:'Not configured', srcBoc:'Bank of China', srcBochk:'BOC (Hong Kong)', srcJuheFx:'Juhe (bank rate)', srcMarketRate:'Market rate (fallback)', srcZhlsy:'Yuepeng Gold Data API', srcFallbackSuffix:' (fallback)',
-      fieldJuheFxKey:'Juhe FX rate APPKEY (optional, more authoritative)', phJuheFxKey:'Leave blank to try Bank of China automatically',
-      btnDelete:'Delete', btnDeleteSpec:'Delete spec', btnDisable:'Disable', btnEnable:'Enable', statusEnabled:'Active', statusDisabled:'Disabled',
+      srcEastmoney:'Eastmoney', srcJisu:'Jisuapi', srcUnavailable:'Unavailable', srcNotConfigured:'Not configured', srcBoc:'Bank of China', srcBochk:'BOC (Hong Kong)', srcMarketRate:'Market rate (fallback)', srcZhlsy:'Yuepeng Gold Data API', srcFallbackSuffix:' (fallback)',
+            btnDelete:'Delete', btnDeleteSpec:'Delete spec', btnDisable:'Disable', btnEnable:'Enable', statusEnabled:'Active', statusDisabled:'Disabled',
       statusOutOfStock:'Out of stock', statusLowStock:'Low stock', statusNormal:'Normal',
       chartEmptyHint:'No sales in the last 7 days', unconvertedHkdPrefix:'Plus ', unconvertedHkdSuffix:'HKD not converted (no rate)',
       unconvertedCnyPrefix:'Plus ', unconvertedCnySuffix:'RMB not converted (no rate)',
@@ -1658,7 +1654,7 @@
 
   /* ============ Gold price sources (东方财富网 for SGE + London; 极速数据 for 周大福 HK) ============ */
   const OZ_TO_G = 31.1035;
-  const TIMEOUT_MS = 4000;
+  const TIMEOUT_MS = 6500;
 
   async function fetchJson(url){
     const controller = new AbortController();
@@ -1676,10 +1672,8 @@
   const FX_URL = "https://open.er-api.com/v6/latest/USD";
 
   const JISU_KEY_STORAGE = 'erp_jisuapi_appkey';
-  const JUHE_FX_KEY_STORAGE = 'erp_juhe_fx_appkey';
   const HKD_RATE_OVERRIDE_STORAGE = 'erp_hkd_rate_override';
   const getJisuKey = () => { try{ return localStorage.getItem(JISU_KEY_STORAGE) || ''; }catch(e){ return ''; } };
-  const getJuheFxKey = () => { try{ return localStorage.getItem(JUHE_FX_KEY_STORAGE) || ''; }catch(e){ return ''; } };
   const getHkdRateOverride = () => { try{ const v = localStorage.getItem(HKD_RATE_OVERRIDE_STORAGE); return v ? parseFloat(v) : null; }catch(e){ return null; } };
 
   let sgePriceGlobal = null;      // 元/克，来自东方财富网 SGE
@@ -1766,24 +1760,6 @@
     return fetchViaProxyCascade(BOCHK_URL, parseBochkHkdCny, 'BOCHK');
   }
 
-  // Optional licensed source (聚合数据 / Juhe rmbquot — a paid reseller of bank exchange-rate
-  // data). Only tried when the user has configured a free APPKEY under System → Parameters.
-  // Note: this endpoint is HTTP-only, so it will be blocked by the browser's mixed-content
-  // policy if this page is ever hosted over HTTPS — it mainly helps when opened locally.
-  async function fetchJuheHkdRate(){
-    const key = getJuheFxKey();
-    if (!key) return null;
-    try{
-      const j = await fetchJson("http://web.juhe.cn:8080/finance/exchange/rmbquot?key="+encodeURIComponent(key));
-      if (!j || j.resultcode !== "200" || !j.result || !j.result[0]) return null;
-      const list = Object.values(j.result[0]);
-      const item = list.find(x => x.name === "港币");
-      if (!item) return null;
-      const conv = parseFloat(item.bankConversionPri || item.fBuyPri);
-      if (!conv) return null;
-      return conv / 100; // per 100 HKD -> per 1 HKD
-    }catch(e){ return null; }
-  }
 
   let refreshInProgress = false;
   async function refreshHomePrices(){
@@ -1840,25 +1816,23 @@
       const londonUsd = j.data.f43;
       let rate = null;
 
-      // Priority: (1) licensed 聚合数据 bank-rate API if configured, (2) 中银香港, (3) 中国银行,
-      // (4) market-rate FX API as a last resort. All of these are kicked off IN PARALLEL
-      // (not one after another) so a slow/failing source doesn't hold up the others — we
-      // pick whichever succeeds according to priority once they've all settled, so the page
-      // never sits blank for the ~30s+ that a fully sequential cascade could take.
-      const [juheResult, bochkResult, bocResult, marketResult] = await Promise.allSettled([
-        fetchJuheHkdRate(),
+      // Priority: (1) 中银香港, (2) 中国银行, (3) market-rate FX API as a last resort. All of
+      // these are kicked off IN PARALLEL (not one after another) so a slow/failing source
+      // doesn't hold up the others — we pick whichever succeeds according to priority once
+      // they've all settled, so the page never sits blank for the ~30s+ that a fully
+      // sequential cascade could take.
+      const [bochkResult, bocResult, marketResult] = await Promise.allSettled([
         fetchBochkHkdRate(),
         fetchBocHkdRate(),
         fetchJson(FX_URL),
       ]);
-      const juheRate = juheResult.status === 'fulfilled' ? juheResult.value : null;
       const bochkRate = bochkResult.status === 'fulfilled' ? bochkResult.value : null;
       const bocRate = bocResult.status === 'fulfilled' ? bocResult.value : null;
       const fx = marketResult.status === 'fulfilled' ? marketResult.value : null;
 
       let hkdSource = null;
-      if (juheRate){ hkdCnyRateGlobal = getHkdRateOverride() || juheRate; hkdSource = t('srcJuheFx'); }
-      else if (bochkRate){ hkdCnyRateGlobal = getHkdRateOverride() || bochkRate; hkdSource = t('srcBochk'); }
+      if (bochkRate){ hkdCnyRateGlobal = getHkdRateOverride() || bochkRate; hkdSource = t('srcBochk'); }
+      else if (bocRate){ hkdCnyRateGlobal = getHkdRateOverride() || bocRate; hkdSource = t('srcBoc'); }
       else if (bocRate){ hkdCnyRateGlobal = getHkdRateOverride() || bocRate; hkdSource = t('srcBoc'); }
       else if (fx && fx.rates && fx.rates.HKD){
         hkdCnyRateGlobal = getHkdRateOverride() || (fx.rates.CNY / fx.rates.HKD);
@@ -2654,7 +2628,6 @@
   /* ============ System management: params ============ */
   function loadSystemParamsIntoForm(){
     $('cfgJisuKey').value = getJisuKey();
-    $('cfgJuheFxKey').value = getJuheFxKey();
     $('cfgHkdRateOverride').value = getHkdRateOverride() || '';
     $('cfgHkdRate').value = hkdCnyRateGlobal ? ('1 HKD ≈ ' + hkdCnyRateGlobal.toFixed(4) + ' CNY (' + (hkdRateSourceGlobal || t('srcMarketRate')) + ')') : t('autoRateNotAvailable');
   }
@@ -2667,10 +2640,8 @@
   });
   $('cfgHkdSave').addEventListener('click', () => {
     const v = $('cfgHkdRateOverride').value.trim();
-    const fxKey = $('cfgJuheFxKey').value.trim();
     try{
       if (v) localStorage.setItem(HKD_RATE_OVERRIDE_STORAGE, v); else localStorage.removeItem(HKD_RATE_OVERRIDE_STORAGE);
-      if (fxKey) localStorage.setItem(JUHE_FX_KEY_STORAGE, fxKey); else localStorage.removeItem(JUHE_FX_KEY_STORAGE);
     }catch(e){}
     logAction(t('logUpdateParams'), t('logParamHkd'));
     loadSystemParamsIntoForm();
