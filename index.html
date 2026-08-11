@@ -437,7 +437,7 @@
               <select id="pwProduct"></select>
             </div>
             <div class="field">
-              <label data-i18n="fieldCtfManualPrice" style="color:var(--rise);">周大福香港官网金价（手动填写，港元/克）</label>
+              <label data-i18n="fieldCtfManualPrice" style="color:var(--rise);">周大福香港官网金价（自动获取，可手动调整，港元/克）</label>
               <input type="number" id="pwCtfPrice" data-i18n-ph="phCtfManualPrice" placeholder="请到官网查看后手动填写" step="0.01">
             </div>
             <div class="field">
@@ -484,7 +484,7 @@
               <select id="rwProduct"></select>
             </div>
             <div class="field">
-              <label data-i18n="fieldRecyclePrice" style="color:var(--rise);">周大福香港官网回收金价（手动填写，港元/克）</label>
+              <label data-i18n="fieldRecyclePrice" style="color:var(--rise);">周大福香港官网回收金价（自动获取，可手动调整，港元/克）</label>
               <input type="number" id="rwPrice" data-i18n-ph="phRecyclePrice" placeholder="请填写当前回收价格" step="0.01">
             </div>
             <div class="field">
@@ -1092,7 +1092,7 @@
       ctfIframeHint:'如果上方显示空白，说明周大福官网出于安全策略禁止被其他网站内嵌（这是电商网站的常见做法，用于防止点击劫持），此时请使用上面的链接在新页面查看。',
       fxRateTitle:'人民币 / 港元 实时汇率', fxRateUnit:'1 人民币 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'数据来源',
       priceWarnTitle:'售价预警', priceWarnHint:'采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格',
-      fieldCtfManualPrice:'周大福香港官网金价（手动填写，港元/克）', phCtfManualPrice:'请到官网查看后手动填写',
+      fieldCtfManualPrice:'周大福香港官网金价（自动获取，可手动调整，港元/克）', phCtfManualPrice:'正在自动获取，也可手动填写覆盖',
       pwLatestCostLabel:'最新采购单价', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我们的最低售价（+6%，港元/克）', pwCtfRef:'周大福香港价格（手动，港元/克）',
       pwNoPurchase:'该商品规格目前没有仍有库存的采购批次，无法计算最低售价，请先在采购管理中录入采购单（且需有剩余库存）。',
       pwRateUnavailable:'当前汇率暂时无法获取，无法折算港元，请稍后再试。',
@@ -1101,7 +1101,7 @@
       pwOkText:'✅ 正常：建议售价 HK$'+'{ctf}/克 不低于我们的最低售价 HK$'+'{min}/克，符合定价要求。',
       recycleWarnTitle:'回收警示', recycleWarnHint:'回收价不能高于采购价',
       recycleLogicExplain:'规则：建议回收价 = 周大福回收金价 × (1 + 价格上调幅度%)。如果算出来的建议回收价<b>高于</b>我们的最新采购单价，说明按此价格回收会亏本，系统会发出警报，提醒销售人员留意调整。',
-      fieldRecyclePrice:'周大福香港官网回收金价（手动填写，港元/克）', phRecyclePrice:'请到官网查看后手动填写',
+      fieldRecyclePrice:'周大福香港官网回收金价（自动获取，可手动调整，港元/克）', phRecyclePrice:'正在自动获取，也可手动填写覆盖',
       rwRecycleRef:'周大福回收金价（手动，港元/克）', rwNeedManualPrice:'请在上方填写周大福香港官网回收金价后保存，才能进行对比。',
       rwWarningText:'⚠️ 警示：按上调幅度算出的建议回收价 HK$'+'{rw}/克 高于我们的最新采购单价 HK$'+'{cost}/克，若照此回收将出现亏损，请销售人员留意调整。',
       rwOkText:'✅ 正常：建议回收价 HK$'+'{rw}/克 不高于我们的采购单价 HK$'+'{cost}/克，按此价格回收不会亏损。',
@@ -1205,7 +1205,7 @@
       ctfIframeHint:'如果上方顯示空白，代表周大福官網基於安全策略禁止被其他網站內嵌（這是電商網站的常見做法，用於防止點擊劫持），此時請使用上面的連結在新頁面查看。',
       fxRateTitle:'人民幣 / 港元 即時匯率', fxRateUnit:'1 人民幣 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'資料來源',
       priceWarnTitle:'售價預警', priceWarnHint:'採購價 + 採購價 × 6% = 最低售價，不能高於周大福香港官網價格',
-      fieldCtfManualPrice:'周大福香港官網金價（手動填寫，港元/克）', phCtfManualPrice:'請到官網查看後手動填寫',
+      fieldCtfManualPrice:'周大福香港官網金價（自動獲取，可手動調整，港元/克）', phCtfManualPrice:'正在自動獲取，也可手動填寫覆蓋',
       pwLatestCostLabel:'最新採購單價', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我們的最低售價（+6%，港元/克）', pwCtfRef:'周大福香港價格（手動，港元/克）',
       pwNoPurchase:'該商品規格目前沒有仍有庫存的採購批次，無法計算最低售價，請先在採購管理中錄入採購單（且需有剩餘庫存）。',
       pwRateUnavailable:'目前匯率暫時無法取得，無法折算港元，請稍後再試。',
@@ -1214,7 +1214,7 @@
       pwOkText:'✅ 正常：建議售價 HK$'+'{ctf}/克 不低於我們的最低售價 HK$'+'{min}/克，符合定價要求。',
       recycleWarnTitle:'回收警示', recycleWarnHint:'回收價不能高於採購價',
       recycleLogicExplain:'規則：建議回收價 = 周大福回收金價 × (1 + 價格上調幅度%)。如果算出來的建議回收價<b>高於</b>我們的最新採購單價，說明按此價格回收會虧本，系統會發出警報，提醒銷售人員留意調整。',
-      fieldRecyclePrice:'周大福香港官網回收金價（手動填寫，港元/克）', phRecyclePrice:'請到官網查看後手動填寫',
+      fieldRecyclePrice:'周大福香港官網回收金價（自動獲取，可手動調整，港元/克）', phRecyclePrice:'正在自動獲取，也可手動填寫覆蓋',
       rwRecycleRef:'周大福回收金價（手動，港元/克）', rwNeedManualPrice:'請在上方填寫周大福香港官網回收金價後儲存，才能進行比對。',
       rwWarningText:'⚠️ 警示：按上調幅度算出的建議回收價 HK$'+'{rw}/克 高於我們的最新採購單價 HK$'+'{cost}/克，若照此回收將出現虧損，請銷售人員留意調整。',
       rwOkText:'✅ 正常：建議回收價 HK$'+'{rw}/克 不高於我們的採購單價 HK$'+'{cost}/克，按此價格回收不會虧損。',
@@ -1317,7 +1317,7 @@
       ctfIframeHint:'If the box above is blank, Chow Tai Fook\u2019s site is blocking embedding for security reasons (standard practice for e-commerce sites, to prevent clickjacking) \u2014 use the link above to open it in a new page instead.',
       fxRateTitle:'CNY / HKD Live Exchange Rate', fxRateUnit:'1 CNY = ? HKD', unitHkdLabel:'HKD (HKD)', dataSourceLabel:'Data source',
       priceWarnTitle:'Selling Price Alert', priceWarnHint:'Purchase price + purchase price \u00d7 6% = minimum selling price, must not be above Chow Tai Fook HK\u2019s official price',
-      fieldCtfManualPrice:'Chow Tai Fook HK official price (enter manually, HKD/g)', phCtfManualPrice:'Check the official site and enter manually',
+      fieldCtfManualPrice:'Chow Tai Fook HK official price (auto-fetched, editable, HKD/g)', phCtfManualPrice:'Fetching automatically \u2014 you can also override manually',
       pwLatestCostLabel:'Latest Purchase Cost', pwCostUnitOnly:'(HKD/g)', pwCostUnitWithMarkup:'(+{pct}%, HKD/g)', pwMinSell:'Our Minimum Selling Price (+6%, HKD/g)', pwCtfRef:'Chow Tai Fook HK Price (manual, HKD/g)',
       pwNoPurchase:'No purchase batch with remaining stock for this product \u2014 add one under Purchasing (with stock left).',
       pwRateUnavailable:'The current exchange rate isn\u2019t available right now, so HKD conversion isn\u2019t possible \u2014 try again shortly.',
@@ -1326,7 +1326,7 @@
       pwOkText:'\u2705 OK: the suggested selling price HK{ctf}/g is not below our minimum selling price HK{min}/g \u2014 meets pricing requirements.',
       recycleWarnTitle:'Recycle Price Alert', recycleWarnHint:'Buyback price must not exceed our purchase price',
       recycleLogicExplain:'Rule: suggested buyback price = Chow Tai Fook\u2019s recycle price \u00d7 (1 + price increase%). If the resulting suggested price is <b>above</b> our latest purchase cost, buying back at that price would be at a loss, so the system raises an alert.',
-      fieldRecyclePrice:'Chow Tai Fook HK official recycle price (enter manually, HKD/g)', phRecyclePrice:'Check the official site and enter manually',
+      fieldRecyclePrice:'Chow Tai Fook HK official recycle price (auto-fetched, editable, HKD/g)', phRecyclePrice:'Fetching automatically \u2014 you can also override manually',
       rwRecycleRef:'Chow Tai Fook Recycle Price (manual, HKD/g)', rwNeedManualPrice:'Enter and save Chow Tai Fook HK\u2019s official recycle price above to run the comparison.',
       rwWarningText:'\u26a0\ufe0f Alert: the suggested buyback price (computed with the increase margin) HK{rw}/g is above our latest purchase cost HK{cost}/g \u2014 buying back at this price would be at a loss, please review.',
       rwOkText:'\u2705 OK: the suggested buyback price HK{rw}/g is not above our purchase cost HK{cost}/g \u2014 safe to proceed.',
@@ -1678,6 +1678,8 @@
   const getHkdRateOverride = () => { try{ const v = localStorage.getItem(HKD_RATE_OVERRIDE_STORAGE); return v ? parseFloat(v) : null; }catch(e){ return null; } };
 
   let sgePriceGlobal = null;      // 元/克，来自东方财富网 SGE
+  let ctfSellPriceGlobal = null;  // 港元/克，周大福金粒賣出價（自动获取）
+  let ctfBuyPriceGlobal = null;   // 港元/克，周大福金粒買入價（自动获取）
   let londonCnyGlobal = null;     // 元/克，伦敦金换算后
   let ctfHkPriceGlobal = null;    // 港元/克，来自极速数据
   let hkdCnyRateGlobal = null;    // 1 港元 = ? 人民币（自动获取，可被手动覆盖）
@@ -1712,6 +1714,27 @@
     }
   }
   async function refreshHomePricesInner(){
+    // 周大福金粒买卖价 — 自动获取，服务器对服务器调用，见 api/ctf-price.js
+    try{
+      const ctf = await fetchJson('/api/ctf-price');
+      if (ctf && ctf.success){
+        if (ctf.sell != null) ctfSellPriceGlobal = ctf.sell;
+        if (ctf.buy != null) ctfBuyPriceGlobal = ctf.buy;
+        // Auto-fill the manual price fields with the freshly fetched values (for every
+        // product, since Chow Tai Fook's quoted price isn't product-specific) — but only
+        // overwrite if the user isn't actively typing in that exact field right now.
+        const products = loadArr(PRODUCTS_KEY);
+        if (ctfSellPriceGlobal != null){
+          products.forEach(p => setCtfManualPrice(p.name, ctfSellPriceGlobal));
+          if (document.activeElement !== $('pwCtfPrice')) $('pwCtfPrice').value = ctfSellPriceGlobal;
+        }
+        if (ctfBuyPriceGlobal != null){
+          products.forEach(p => setRecycleManualPrice(p.name, ctfBuyPriceGlobal));
+          if (document.activeElement !== $('rwPrice')) $('rwPrice').value = ctfBuyPriceGlobal;
+        }
+      }
+    }catch(e){ console.warn('[CTF price] fetch failed:', e.message || e); }
+
     // SGE (上交所金价) — 优先走自己的后端中转（/api/price3，同源无跨域问题），
     // 其次尝试直连第三方接口（本地测试或未部署后端时），最后退回东方财富备用
     try{
