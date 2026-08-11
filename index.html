@@ -1697,7 +1697,7 @@
     // from localhost/CodePen/GitHub.io-style dev origins and rejects everything else, so it
     // would never work once this page is actually deployed somewhere. thingproxy.freeboard.io
     // is also excluded — observed as ERR_CONNECTION_CLOSED in production, appears to be down.
-    // AllOrigins/CodeTabs need no registration so those are the only automatic attempts.
+    // AllOrigins/CodeTabs/x2u need no registration so those are the automatic attempts.
     // corsfix is deliberately NOT tried automatically — it needs the deployed domain added
     // to a free Corsfix dashboard first (see System Management notes); until that's done it
     // would just fail with HTTP 403 and waste a full timeout cycle on every refresh.
@@ -1705,6 +1705,7 @@
       { name: 'direct', url: targetUrl },
       { name: 'allorigins', url: "https://api.allorigins.win/raw?url=" + encodeURIComponent(targetUrl) },
       { name: 'codetabs', url: "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(targetUrl) },
+      { name: 'x2u', url: "https://cors.x2u.in/" + targetUrl },
     ];
     for (const attempt of attempts){
       try{
