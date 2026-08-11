@@ -1691,76 +1691,11 @@
       return await res.text();
     } finally { clearTimeout(t); }
   }
-  async function fetchViaProxyCascade(targetUrl, parseFn, label){
-    // Shared multi-proxy cascade used for both mainland BOC and BOCHK (Hong Kong) scrapes.
-    // corsproxy.io is deliberately excluded — as of 2026 its free tier only allows requests
-    // from localhost/CodePen/GitHub.io-style dev origins and rejects everything else, so it
-    // would never work once this page is actually deployed somewhere. thingproxy.freeboard.io
-    // is also excluded — observed as ERR_CONNECTION_CLOSED in production, appears to be down.
-    // AllOrigins/CodeTabs/x2u need no registration so those are the automatic attempts.
-    // corsfix is deliberately NOT tried automatically — it needs the deployed domain added
-    // to a free Corsfix dashboard first (see System Management notes); until that's done it
-    // would just fail with HTTP 403 and waste a full timeout cycle on every refresh.
-    const attempts = [
-      { name: 'direct', url: targetUrl },
-      { name: 'allorigins', url: "https://api.allorigins.win/raw?url=" + encodeURIComponent(targetUrl) },
-      { name: 'codetabs', url: "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(targetUrl) },
-      { name: 'x2u', url: "https://cors.x2u.in/" + targetUrl },
-    ];
-    for (const attempt of attempts){
-      try{
-        const html = await fetchText(attempt.url);
-        const rate = parseFn(html);
-        if (rate){
-          console.info('[' + label + '] succeeded via ' + attempt.name, rate);
-          return rate;
-        }
-        console.warn('[' + label + '] ' + attempt.name + ' responded but parsing failed (page structure may have changed, or content was empty)');
-      }catch(e){
-        console.warn('[' + label + '] ' + attempt.name + ' failed:', e.message || e);
-      }
-    }
-    console.error('[' + label + '] all sources failed, falling back to market rate');
-    return null;
-  }
-
-  const BOC_URL = "https://www.boc.cn/sourcedb/whpj/index.html";
-  function parseBocHkd(html){
-    const text = html.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
-    const idx = text.indexOf('港币');
-    if (idx === -1) return null;
-    const after = text.slice(idx, idx + 200);
-    const nums = after.match(/\d+\.?\d*/g);
-    if (!nums || nums.length < 5) return null;
-    const conv = parseFloat(nums[4]); // 中行折算价, per 100 HKD
-    if (!conv) return null;
-    return conv / 100;
-  }
-  async function fetchBocHkdRate(){
-    return fetchViaProxyCascade(BOC_URL, parseBocHkd, 'BOC');
-  }
-
-  // Bank of China (Hong Kong) — BOCHK, a Hong-Kong-incorporated, HKEX-listed bank distinct
-  // from mainland Bank of China. Its rates page loads via an old-style Java action endpoint
-  // that returns plain server-rendered HTML with the numbers already in place (same reason
-  // mainland BOC's page is scrapable, unlike ICBC/CCB/CMB which inject via client-side JS).
-  const BOCHK_URL = "https://www.bochk.com/whk/rates/exchangeRatesHKD/exchangeRatesHKD-input.action?lang=hk";
-  function parseBochkHkdCny(html){
-    const text = html.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
-    const idx = text.indexOf('人民幣(在岸)');
-    if (idx === -1) return null;
-    const after = text.slice(idx, idx + 100);
-    const nums = after.match(/\d+\.\d+/g);
-    if (!nums || nums.length < 2) return null;
-    const sell = parseFloat(nums[0]), buy = parseFloat(nums[1]); // HKD per 1 CNY
-    const hkdPerCny = (sell + buy) / 2;
-    if (!hkdPerCny) return null;
-    return 1 / hkdPerCny; // invert to CNY per 1 HKD, matching our hkdCnyRateGlobal convention
-  }
-  async function fetchBochkHkdRate(){
-    return fetchViaProxyCascade(BOCHK_URL, parseBochkHkdCny, 'BOCHK');
-  }
-
+  // Note: BOC/BOCHK exchange-rate scraping used to happen here via client-side JS through
+  // third-party CORS proxies (AllOrigins, CodeTabs, etc). That approach was replaced with a
+  // server-side endpoint (/api/fx-rate) which does the same scrape from Vercel's servers —
+  // immune to browser CORS entirely, and far more reliable than depending on the uptime of
+  // free public CORS proxies. See api/fx-rate.js.
 
   let refreshInProgress = false;
   async function refreshHomePrices(){
@@ -1817,25 +1752,23 @@
       const londonUsd = j.data.f43;
       let rate = null;
 
-      // Priority: (1) 中银香港, (2) 中国银行, (3) market-rate FX API as a last resort. All of
-      // these are kicked off IN PARALLEL (not one after another) so a slow/failing source
-      // doesn't hold up the others — we pick whichever succeeds according to priority once
-      // they've all settled, so the page never sits blank for the ~30s+ that a fully
-      // sequential cascade could take.
-      const [bochkResult, bocResult, marketResult] = await Promise.allSettled([
-        fetchBochkHkdRate(),
-        fetchBocHkdRate(),
+      // Get the bank exchange rate via our own server-side endpoint (server-to-server,
+      // immune to browser CORS — this replaced the old approach of scraping BOC/BOCHK
+      // directly from client-side JS through third-party CORS proxies, which kept failing
+      // because those free proxies are frequently too slow or unreliable). Market-rate FX
+      // API is still used as the final fallback if our endpoint can't get either bank rate.
+      const [fxRateResult, marketResult] = await Promise.allSettled([
+        fetchJson('/api/fx-rate'),
         fetchJson(FX_URL),
       ]);
-      const bochkRate = bochkResult.status === 'fulfilled' ? bochkResult.value : null;
-      const bocRate = bocResult.status === 'fulfilled' ? bocResult.value : null;
+      const fxRateResp = fxRateResult.status === 'fulfilled' ? fxRateResult.value : null;
       const fx = marketResult.status === 'fulfilled' ? marketResult.value : null;
 
       let hkdSource = null;
-      if (bochkRate){ hkdCnyRateGlobal = getHkdRateOverride() || bochkRate; hkdSource = t('srcBochk'); }
-      else if (bocRate){ hkdCnyRateGlobal = getHkdRateOverride() || bocRate; hkdSource = t('srcBoc'); }
-      else if (bocRate){ hkdCnyRateGlobal = getHkdRateOverride() || bocRate; hkdSource = t('srcBoc'); }
-      else if (fx && fx.rates && fx.rates.HKD){
+      if (fxRateResp && fxRateResp.success && fxRateResp.rate){
+        hkdCnyRateGlobal = getHkdRateOverride() || fxRateResp.rate;
+        hkdSource = fxRateResp.source === 'bochk' ? t('srcBochk') : t('srcBoc');
+      } else if (fx && fx.rates && fx.rates.HKD){
         hkdCnyRateGlobal = getHkdRateOverride() || (fx.rates.CNY / fx.rates.HKD);
         hkdSource = t('srcMarketRate');
       }
