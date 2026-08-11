@@ -33,10 +33,11 @@ function parseBochkHkdCny(html) {
   const after = text.slice(idx, idx + 100);
   const nums = after.match(/\d+\.\d+/g);
   if (!nums || nums.length < 2) return null;
-  const sell = parseFloat(nums[0]), buy = parseFloat(nums[1]); // HKD per 1 CNY
-  const hkdPerCny = (sell + buy) / 2;
-  if (!hkdPerCny) return null;
-  return 1 / hkdPerCny; // invert to CNY per 1 HKD
+  const buy = parseFloat(nums[1]); // 客户买入价 (customer_buy), HKD per 1 CNY — matches
+  // the convention used by the colleague's independent BOCHK scraper (Cloudflare Worker),
+  // which uses customer_buy directly rather than averaging sell/buy.
+  if (!buy) return null;
+  return 1 / buy; // invert to CNY per 1 HKD
 }
 
 function parseBocHkd(html) {
