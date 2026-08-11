@@ -2411,6 +2411,7 @@
       ? t('pwCostUnitWithMarkup').replace('{pct}', fmtNum(markupPct,2))
       : t('pwCostUnitOnly');
   }
+  const PW_MARKUP_PCT = 1.15; // fixed markup used to derive 最新采购单价 from the live SGE price
   function renderPriceWarning(){
     const product = $('pwProduct').value;
     if (!product) return;
@@ -2421,25 +2422,14 @@
     const typedEdge = $('pwEdgePct').value.trim();
     const edgePct = typedEdge !== '' ? parseFloat(typedEdge) : getPwEdgePct();
 
-    const purchase = referencePurchaseForProduct(product);
     const box = $('pwWarningBox');
     const reasonBox = $('pwSuggestReason');
 
-    if (!purchase){
-      $('pwCostDisplay').textContent = '--';
-      $('pwCostMarkupSuffix').textContent = costSuffixText(null);
-      $('pwMinSellDisplay').textContent = '--';
-      $('pwCtfDisplay').textContent = (savedPrice != null) ? ('HK$'+fmtNum(savedPrice,2)) : '--';
-      $('pwSuggestDisplay').textContent = '--';
-      box.className = 'price-placeholder pw-neutral';
-      box.textContent = t('pwNoPurchase');
-      reasonBox.textContent = '';
-      return;
-    }
-
-    $('pwCostMarkupSuffix').textContent = costSuffixText(purchase.markupPct);
-    const costHkd = fromCnyAmount(toCnyAmount(purchaseCostPerGram(purchase), purchase.currency || 'CNY'), 'HKD');
-    if (costHkd === null){
+    // 最新采购单价 — new rule: derived directly from 粤鹏金 live gold price (上交所金价),
+    // not from purchase/inventory records. = 粤鹏金金价 + 粤鹏金金价 × 1.15%.
+    $('pwCostMarkupSuffix').textContent = costSuffixText(PW_MARKUP_PCT);
+    const sgeHkd = (sgePriceGlobal != null) ? fromCnyAmount(sgePriceGlobal, 'HKD') : null;
+    if (sgeHkd === null){
       $('pwCostDisplay').textContent = '--';
       $('pwMinSellDisplay').textContent = '--';
       $('pwCtfDisplay').textContent = (savedPrice != null) ? ('HK$'+fmtNum(savedPrice,2)) : '--';
@@ -2449,10 +2439,9 @@
       reasonBox.textContent = '';
       return;
     }
+    const costHkd = sgeHkd * (1 + PW_MARKUP_PCT/100);
 
-    // Minimum selling price = 最新采购单价(+markup%) × (1 + 6%) — built on top of the
-    // marked-up "converted cost" (最新采购单价 with the supplier markup already included),
-    // not the raw base unit price.
+    // Minimum selling price = 最新采购单价 × (1 + 6%).
     const minSellHkd = costHkd * (1 + MIN_SELL_MARKUP);
     $('pwCostDisplay').textContent = 'HK$' + fmtNum(costHkd, 2);
     $('pwMinSellDisplay').textContent = 'HK$' + fmtNum(minSellHkd, 2);
@@ -2525,26 +2514,14 @@
     const liveEdgeVal = $('rwEdgePct').value;
     const edgePct = (liveEdgeVal !== '' && !isNaN(parseFloat(liveEdgeVal))) ? parseFloat(liveEdgeVal) : 1;
 
-    const purchase = referencePurchaseForProduct(product);
     const box = $('rwWarningBox');
     const reasonBox = $('rwSuggestReason');
 
-    if (!purchase){
-      $('rwCostDisplay').textContent = '--';
-      $('rwCostMarkupSuffix').textContent = costSuffixText(null);
-      $('rwPriceDisplay').textContent = (savedPrice != null) ? ('HK$'+fmtNum(savedPrice,2)) : '--';
-      $('rwSuggestDisplay').textContent = '--';
-      $('rwSuggestAboveCostNote').style.display = 'none';
-      $('rwSuggestBelowCostNote').style.display = 'none';
-      box.className = 'price-placeholder pw-neutral';
-      box.textContent = t('pwNoPurchase');
-      reasonBox.textContent = '';
-      return;
-    }
-
-    $('rwCostMarkupSuffix').textContent = costSuffixText(purchase.markupPct);
-    const costHkd = fromCnyAmount(toCnyAmount(purchaseCostPerGram(purchase), purchase.currency || 'CNY'), 'HKD');
-    if (costHkd === null){
+    // 最新采购单价 — same new rule as 售价预警: derived directly from 粤鹏金 live gold
+    // price (上交所金价), not from purchase/inventory records.
+    $('rwCostMarkupSuffix').textContent = costSuffixText(PW_MARKUP_PCT);
+    const sgeHkd = (sgePriceGlobal != null) ? fromCnyAmount(sgePriceGlobal, 'HKD') : null;
+    if (sgeHkd === null){
       $('rwCostDisplay').textContent = '--';
       $('rwPriceDisplay').textContent = (savedPrice != null) ? ('HK$'+fmtNum(savedPrice,2)) : '--';
       $('rwSuggestDisplay').textContent = '--';
@@ -2555,6 +2532,7 @@
       reasonBox.textContent = '';
       return;
     }
+    const costHkd = sgeHkd * (1 + PW_MARKUP_PCT/100);
 
     $('rwCostDisplay').textContent = 'HK$' + fmtNum(costHkd, 2);
 
