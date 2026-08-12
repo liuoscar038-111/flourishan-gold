@@ -984,6 +984,11 @@
     return Number(n).toLocaleString('zh-CN', { minimumFractionDigits: d, maximumFractionDigits: d });
   };
   const fmtMoney = (n) => "¥" + fmtNum(n, 2);
+  function fmtDateTime(d){
+    const pad = (n) => String(n).padStart(2, '0');
+    return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' '
+      + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  }
 
   function loadArr(key){ try{ const v = JSON.parse(localStorage.getItem(key)); return Array.isArray(v) ? v : []; }catch(e){ return []; } }
   function saveArr(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
@@ -1113,7 +1118,7 @@
       loginBtn:'登录', loginHintText:'如果忘记密码，请联系管理员重置。', logoutBtn:'退出登录',
       accountSectionTitle:'登录账号设置', fieldNewUsername:'账号', fieldNewPassword:'新密码', phKeepCurrent:'留空则不修改',
       alertAccountSaved:'账号设置已保存', alertUsernameRequired:'账号不能为空',
-      homePriceTitle:'实时金价', homePriceHint:'数据来源：东方财富网 · 每 20 秒自动刷新', priceDelayNote:'（数据延迟，仅作参考）',
+      homePriceTitle:'实时金价', homePriceHint:'上交所每 5 秒 · 伦敦金每 20 秒自动刷新', priceDelayNote:'（数据延迟，仅作参考）',
       cardSgeEyebrow:'上海黄金交易所 · Au9999', cardSgeTitle:'上交所金价', unitYuanGram:'元/克', updatedAt:'更新时间', convertedHkdLabel:'折合港元/克',
       cardLondonEyebrow:'伦敦金 · 国际金价参考', cardLondonTitle:'伦敦金（换算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金价', cardCtfTitle:'港式品牌金价',
@@ -1122,8 +1127,8 @@
       ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'资料来源：周大福香港官网',
       ctfIframeHint:'如果上方显示空白，说明周大福官网出于安全策略禁止被其他网站内嵌（这是电商网站的常见做法，用于防止点击劫持），此时请使用上面的链接在新页面查看。',
       fxRateTitle:'人民币 / 港元 实时汇率', fxRateUnit:'1 人民币 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'数据来源',
-      priceWarnTitle:'售价预警', priceWarnHint:'采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格',
-      priceWarnHintPrefix:'今日金价（更新时间', priceWarnHintFormula:'） 上交所金价 × 汇率 ×（1+1.15%）×（1+6%）= 我们的最低售价',
+      priceWarnTitle:'今日金价', priceWarnHint:'采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格',
+      priceWarnHintPrefix:'（更新时间', priceWarnHintFormula:'）：上交所金价 × 汇率 ×（1+1.15%）×（1+6%）= 我们的最低售价',
       fieldCtfManualPrice:'周大福香港官网金价（自动获取，可手动调整，港元/克）', phCtfManualPrice:'正在自动获取，也可手动填写覆盖',
       pwLatestCostLabel:'最新采购单价', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我们的最低售价（+6%，港元/克）', pwCtfRef:'周大福香港价格（自动，港元/克）',
       pwNoPurchase:'该商品规格目前没有仍有库存的采购批次，无法计算最低售价，请先在采购管理中录入采购单（且需有剩余库存）。',
@@ -1229,7 +1234,7 @@
       loginBtn:'登入', loginHintText:'如果忘記密碼，請聯繫管理員重設。', logoutBtn:'登出',
       accountSectionTitle:'登入帳號設定', fieldNewUsername:'帳號', fieldNewPassword:'新密碼', phKeepCurrent:'留空則不修改',
       alertAccountSaved:'帳號設定已儲存', alertUsernameRequired:'帳號不能為空',
-      homePriceTitle:'即時金價', homePriceHint:'資料來源：東方財富網 · 每 20 秒自動更新', priceDelayNote:'（資料延遲，僅供參考）',
+      homePriceTitle:'即時金價', homePriceHint:'上交所每 5 秒 · 倫敦金每 20 秒自動更新', priceDelayNote:'（資料延遲，僅供參考）',
       cardSgeEyebrow:'上海黃金交易所 · Au9999', cardSgeTitle:'上交所金價', unitYuanGram:'元/克', updatedAt:'更新時間', convertedHkdLabel:'折合港元/克',
       cardLondonEyebrow:'倫敦金 · 國際金價參考', cardLondonTitle:'倫敦金（換算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金價', cardCtfTitle:'港式品牌金價',
@@ -1238,8 +1243,8 @@
       ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'資料來源：周大福香港官網',
       ctfIframeHint:'如果上方顯示空白，代表周大福官網基於安全策略禁止被其他網站內嵌（這是電商網站的常見做法，用於防止點擊劫持），此時請使用上面的連結在新頁面查看。',
       fxRateTitle:'人民幣 / 港元 即時匯率', fxRateUnit:'1 人民幣 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'資料來源',
-      priceWarnTitle:'售價預警', priceWarnHint:'採購價 + 採購價 × 6% = 最低售價，不能高於周大福香港官網價格',
-      priceWarnHintPrefix:'今日金價（更新時間', priceWarnHintFormula:'） 上交所金價 × 匯率 ×（1+1.15%）×（1+6%）= 我們的最低售價',
+      priceWarnTitle:'今日金價', priceWarnHint:'採購價 + 採購價 × 6% = 最低售價，不能高於周大福香港官網價格',
+      priceWarnHintPrefix:'（更新時間', priceWarnHintFormula:'）：上交所金價 × 匯率 ×（1+1.15%）×（1+6%）= 我們的最低售價',
       fieldCtfManualPrice:'周大福香港官網金價（自動獲取，可手動調整，港元/克）', phCtfManualPrice:'正在自動獲取，也可手動填寫覆蓋',
       pwLatestCostLabel:'最新採購單價', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我們的最低售價（+6%，港元/克）', pwCtfRef:'周大福香港價格（自動，港元/克）',
       pwNoPurchase:'該商品規格目前沒有仍有庫存的採購批次，無法計算最低售價，請先在採購管理中錄入採購單（且需有剩餘庫存）。',
@@ -1353,8 +1358,8 @@
       ctfSellLabel:'Gold Pellet Sell (HKD/g)', ctfBuyLabel:'Gold Pellet Buy (HKD/g)', srcCtfOfficial:'Source: Chow Tai Fook HK official site',
       ctfIframeHint:'If the box above is blank, Chow Tai Fook\u2019s site is blocking embedding for security reasons (standard practice for e-commerce sites, to prevent clickjacking) \u2014 use the link above to open it in a new page instead.',
       fxRateTitle:'CNY / HKD Live Exchange Rate', fxRateUnit:'1 CNY = ? HKD', unitHkdLabel:'HKD (HKD)', dataSourceLabel:'Data source',
-      priceWarnTitle:'Selling Price Alert', priceWarnHint:'Purchase price + purchase price \u00d7 6% = minimum selling price, must not be above Chow Tai Fook HK\u2019s official price',
-      priceWarnHintPrefix:'Today\u2019s gold price (updated', priceWarnHintFormula:') SGE price \u00d7 FX rate \u00d7 (1+1.15%) \u00d7 (1+6%) = our minimum selling price',
+      priceWarnTitle:'Today\u2019s Gold Price', priceWarnHint:'Purchase price + purchase price \u00d7 6% = minimum selling price, must not be above Chow Tai Fook HK\u2019s official price',
+      priceWarnHintPrefix:'(updated', priceWarnHintFormula:'): SGE price \u00d7 FX rate \u00d7 (1+1.15%) \u00d7 (1+6%) = our minimum selling price',
       fieldCtfManualPrice:'Chow Tai Fook HK official price (auto-fetched, editable, HKD/g)', phCtfManualPrice:'Fetching automatically \u2014 you can also override manually',
       pwLatestCostLabel:'Latest Purchase Cost', pwCostUnitOnly:'(HKD/g)', pwCostUnitWithMarkup:'(+{pct}%, HKD/g)', pwMinSell:'Our Minimum Selling Price (+6%, HKD/g)', pwCtfRef:'Chow Tai Fook HK Price (auto, HKD/g)',
       pwNoPurchase:'No purchase batch with remaining stock for this product \u2014 add one under Purchasing (with stock left).',
@@ -1694,7 +1699,7 @@
 
   /* ============ Gold price sources (东方财富网 for SGE + London; 极速数据 for 周大福 HK) ============ */
   const OZ_TO_G = 31.1035;
-  const TIMEOUT_MS = 9000;
+  const TIMEOUT_MS = 12000;
 
   async function fetchJson(url){
     const controller = new AbortController();
@@ -1723,6 +1728,7 @@
   let ctfHkPriceGlobal = null;    // 港元/克，来自极速数据
   let hkdCnyRateGlobal = null;    // 1 港元 = ? 人民币（自动获取，可被手动覆盖）
   let hkdRateSourceGlobal = null; // 标注汇率来源：中国银行 / 市场汇率
+  let cnyPerUsdGlobal = null;     // 市场汇率 API 给的 CNY/USD，用于换算伦敦金，慢档刷新
 
   async function fetchText(url){
     const controller = new AbortController();
@@ -1740,6 +1746,7 @@
   // free public CORS proxies. See api/fx-rate.js.
 
   let refreshInProgress = false;
+  let refreshTickCounter = 0;
   async function refreshHomePrices(){
     if (refreshInProgress){
       console.warn('[refresh] previous cycle still running, skipping this tick');
@@ -1747,13 +1754,64 @@
     }
     refreshInProgress = true;
     try{
-      await refreshHomePricesInner();
+      await refreshHomePricesInner(refreshTickCounter);
+      refreshTickCounter++;
     } finally {
       refreshInProgress = false;
     }
   }
-  async function refreshHomePricesInner(){
-    // 周大福金粒买卖价 — 自动获取，服务器对服务器调用，见 api/ctf-price.js
+  // SGE (上交所金价) gets its own fast, standalone refresh loop, separate from the main
+  // 20s cycle — it's the one genuinely real-time-ish figure among everything on this page
+  // (unlike London/FX/CTF which only change a handful of times a day), so it's worth
+  // keeping noticeably fresher than the rest, and it's cheap to do since /api/price3 is our
+  // own lightweight Vercel function.
+  let sgeRefreshInProgress = false;
+  async function refreshSgePrice(){
+    if (sgeRefreshInProgress) return;
+    sgeRefreshInProgress = true;
+    try{
+      let price = null, srcLabel = null;
+      try{
+        const j = await fetchJson('/api/price3');
+        if (!j || !j.success || !j.data || j.data.currentPrice == null) throw new Error('bad response: ' + JSON.stringify(j));
+        price = j.data.currentPrice;
+        srcLabel = t('srcZhlsy');
+      }catch(eProxy){
+        try{
+          const j = await fetchJson(ZHLSY_GOLD_URL);
+          if (!j || !j.success || !j.data || j.data.currentPrice == null) throw new Error('bad response: ' + JSON.stringify(j));
+          price = j.data.currentPrice;
+          srcLabel = t('srcZhlsy');
+        }catch(e1){
+          const j2 = await fetchJson(EASTMONEY_SGE_URL);
+          if (!j2 || !j2.data || j2.data.f43 == null) throw new Error('no data');
+          price = j2.data.f43;
+          srcLabel = t('srcEastmoney') + t('srcFallbackSuffix');
+        }
+      }
+      sgePriceGlobal = price;
+      $('priceSge').textContent = fmtNum(price, 2);
+      $('srcSge').textContent = srcLabel;
+      $('metaSge').textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false});
+      // These all depend on sgePriceGlobal, so recompute them right away rather than
+      // waiting for the slower main cycle to get around to it.
+      renderHomeKpisAndChart();
+      renderPriceWarning();
+      renderRecycleWarning();
+    }catch(e){
+      $('srcSge').textContent = t('srcUnavailable');
+    } finally {
+      sgeRefreshInProgress = false;
+    }
+  }
+
+  async function refreshHomePricesInner(refreshTick){
+    // 周大福金粒买卖价 — 自动获取，服务器对服务器调用，见 api/ctf-price.js.
+    // This is the "slow tier": Chow Tai Fook only updates its posted retail price a
+    // handful of times a day (its own updateDate timestamps confirm this), so refetching
+    // it on every 20s tick would just hammer their server for no real benefit — instead
+    // it only runs once every 3 ticks (~60s with the current interval).
+    if (refreshTick % 3 === 0){
     try{
       const ctf = await fetchJson('/api/ctf-price');
       if (ctf && ctf.success){
@@ -1782,87 +1840,54 @@
       console.warn('[CTF price] fetch failed:', e.message || e);
       $('srcCtf').textContent = t('srcUnavailable');
     }
-
-    // SGE (上交所金价) — 优先走自己的后端中转（/api/price3，同源无跨域问题），
-    // 其次尝试直连第三方接口（本地测试或未部署后端时），最后退回东方财富备用
-    try{
-      let price = null, srcLabel = null;
-      try{
-        const j = await fetchJson('/api/price3');
-        if (!j || !j.success || !j.data || j.data.currentPrice == null) throw new Error('bad response: ' + JSON.stringify(j));
-        price = j.data.currentPrice;
-        srcLabel = t('srcZhlsy');
-        console.info('[ZHLSY via /api/price3] succeeded', price);
-      }catch(eProxy){
-        console.warn('[ZHLSY via /api/price3] failed:', eProxy.message || eProxy);
-        try{
-          const j = await fetchJson(ZHLSY_GOLD_URL);
-          if (!j || !j.success || !j.data || j.data.currentPrice == null) throw new Error('bad response: ' + JSON.stringify(j));
-          price = j.data.currentPrice;
-          srcLabel = t('srcZhlsy');
-          console.info('[ZHLSY direct] succeeded', price);
-        }catch(e1){
-          console.warn('[ZHLSY direct] failed:', e1.message || e1);
-          const j2 = await fetchJson(EASTMONEY_SGE_URL);
-          if (!j2 || !j2.data || j2.data.f43 == null) throw new Error('no data');
-          price = j2.data.f43;
-          srcLabel = t('srcEastmoney') + t('srcFallbackSuffix');
-        }
-      }
-      sgePriceGlobal = price;
-      $('priceSge').textContent = fmtNum(price, 2);
-      $('srcSge').textContent = srcLabel;
-      $('metaSge').textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false});
-    }catch(e){
-      $('srcSge').textContent = t('srcUnavailable');
     }
 
-    // London -> CNY/g — 东方财富网 + 汇率（优先官方中国银行汇率）
+    // London -> CNY/g — 东方财富网，永远每次都刷新（现货金价本身波动较快，值得保持新鲜）
     try{
       const j = await fetchJson(EASTMONEY_LONDON_URL);
       if (!j || !j.data || j.data.f43 == null) throw new Error('no data');
       const londonUsd = j.data.f43;
-      let rate = null;
 
-      // Get the bank exchange rate via our own server-side endpoint (server-to-server,
-      // immune to browser CORS — this replaced the old approach of scraping BOC/BOCHK
-      // directly from client-side JS through third-party CORS proxies, which kept failing
-      // because those free proxies are frequently too slow or unreliable). Market-rate FX
-      // API is still used as the final fallback if our endpoint can't get either bank rate.
-      const [fxRateResult, marketResult] = await Promise.allSettled([
-        fetchJson('/api/fx-rate'),
-        fetchJson(FX_URL),
-      ]);
-      const fxRateResp = fxRateResult.status === 'fulfilled' ? fxRateResult.value : null;
-      const fx = marketResult.status === 'fulfilled' ? marketResult.value : null;
+      // 汇率 — 慢档：银行汇率一天只更新几次，没必要每 20 秒都重新抓一次去打银行的网站，
+      // 跟周大福价格一样，只在每第 3 轮（约 60 秒）才重新抓取一次；其余时间沿用上次抓到
+      // 的 hkdCnyRateGlobal / cnyPerUsdGlobal，London 现货价照样能实时换算成港元，不会因
+      // 为没刷新汇率而卡住不动。
+      if (refreshTick % 3 === 0){
+        const [fxRateResult, marketResult] = await Promise.allSettled([
+          fetchJson('/api/fx-rate'),
+          fetchJson(FX_URL),
+        ]);
+        const fxRateResp = fxRateResult.status === 'fulfilled' ? fxRateResult.value : null;
+        const fx = marketResult.status === 'fulfilled' ? marketResult.value : null;
 
-      let hkdSource = null;
-      if (fxRateResp && fxRateResp.success && fxRateResp.rate){
-        hkdCnyRateGlobal = getHkdRateOverride() || fxRateResp.rate;
-        hkdSource = fxRateResp.source === 'bochk' ? t('srcBochk') : t('srcBoc');
-      } else if (fx && fx.rates && fx.rates.HKD){
-        hkdCnyRateGlobal = getHkdRateOverride() || (fx.rates.CNY / fx.rates.HKD);
-        hkdSource = t('srcMarketRate');
+        let hkdSource = null;
+        if (fxRateResp && fxRateResp.success && fxRateResp.rate){
+          hkdCnyRateGlobal = getHkdRateOverride() || fxRateResp.rate;
+          hkdSource = fxRateResp.source === 'bochk' ? t('srcBochk') : t('srcBoc');
+        } else if (fx && fx.rates && fx.rates.HKD){
+          hkdCnyRateGlobal = getHkdRateOverride() || (fx.rates.CNY / fx.rates.HKD);
+          hkdSource = t('srcMarketRate');
+        }
+        if (fx && fx.rates) cnyPerUsdGlobal = fx.rates.CNY;
+        hkdRateSourceGlobal = hkdSource;
+
+        // Live CNY/HKD rate display on the home page — shown as 1 CNY = ? HKD, which is the
+        // inverse of hkdCnyRateGlobal (which is stored/used internally as "1 HKD = ? CNY").
+        if (hkdCnyRateGlobal){
+          $('fxRateDisplay').textContent = fmtNum(1 / hkdCnyRateGlobal, 5);
+          $('srcFxRate').textContent = hkdRateSourceGlobal || t('srcMarketRate');
+          $('fxRateMeta').textContent = t('dataSourceLabel') + '：' + (hkdRateSourceGlobal || t('srcMarketRate')) + ' · ' + t('updatedAt') + ' ' + new Date().toLocaleTimeString('zh-CN',{hour12:false});
+        } else {
+          $('fxRateDisplay').textContent = '--';
+          $('srcFxRate').textContent = t('srcUnavailable');
+        }
       }
-      if (fx && fx.rates) rate = fx.rates.CNY;
-      hkdRateSourceGlobal = hkdSource;
 
-      // Live CNY/HKD rate display on the home page — shown as 1 CNY = ? HKD, which is the
-      // inverse of hkdCnyRateGlobal (which is stored/used internally as "1 HKD = ? CNY").
-      if (hkdCnyRateGlobal){
-        $('fxRateDisplay').textContent = fmtNum(1 / hkdCnyRateGlobal, 5);
-        $('srcFxRate').textContent = hkdRateSourceGlobal || t('srcMarketRate');
-        $('fxRateMeta').textContent = t('dataSourceLabel') + '：' + (hkdRateSourceGlobal || t('srcMarketRate')) + ' · ' + t('updatedAt') + ' ' + new Date().toLocaleTimeString('zh-CN',{hour12:false});
-      } else {
-        $('fxRateDisplay').textContent = '--';
-        $('srcFxRate').textContent = t('srcUnavailable');
-      }
-
-      if (rate !== null){
-        const cny = londonUsd * rate / OZ_TO_G;
+      if (cnyPerUsdGlobal !== null){
+        const cny = londonUsd * cnyPerUsdGlobal / OZ_TO_G;
         londonCnyGlobal = cny;
         $('priceLondon').textContent = fmtNum(cny, 2);
-        $('metaLondonUsd').textContent = fmtNum(londonUsd,2) + " " + t('unitUsdOz') + " · FX " + fmtNum(rate,4);
+        $('metaLondonUsd').textContent = fmtNum(londonUsd,2) + " " + t('unitUsdOz') + " · FX " + fmtNum(cnyPerUsdGlobal,4);
       }
       $('srcLondon').textContent = t('srcEastmoney');
       $('metaLondon').textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false});
@@ -2430,7 +2455,7 @@
     const minSellHkd = costHkd * (1 + MIN_SELL_MARKUP);
     $('pwCostDisplay').textContent = 'HK$' + fmtNum(costHkd, 2);
     $('pwMinSellDisplay').textContent = 'HK$' + fmtNum(minSellHkd, 2);
-    $('pwHintUpdateTime').textContent = new Date().toLocaleTimeString('zh-CN', {hour12:false});
+    $('pwHintUpdateTime').textContent = fmtDateTime(new Date());
 
     // 1g/5g/10g breakdown — always based on 我们的最低售价 (minSellHkd), independent of
     // which product spec happens to be selected (the hidden pwProduct field is only used
@@ -2834,6 +2859,10 @@
     applyLang(currentLang);
     refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); });
     setInterval(() => { refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); }); }, 20000);
+    // SGE (上交所金价) is real-time-ish and worth refreshing much faster than everything
+    // else — its own lightweight loop, independent of the 20s cycle above.
+    refreshSgePrice();
+    setInterval(refreshSgePrice, 5000);
     // Periodically refresh shared data from the database so changes made by
     // teammates on other devices eventually show up here too.
     setInterval(async () => {
