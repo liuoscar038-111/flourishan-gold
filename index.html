@@ -138,6 +138,7 @@
   .price-card .price-meta{ font-size:11px; color: var(--muted-2); margin-top:10px; }
   .price-card .converted{
     padding:8px 10px; border-radius:8px; background: var(--accent-soft); border:1px dashed rgba(169,124,59,0.3);
+    text-align:center;
   }
   .price-card .converted .k{ font-size:10.5px; color: var(--accent-dark); letter-spacing:0.5px; margin-bottom:2px; }
   .price-card .converted .v{ font-size:16px; font-weight:700; color: var(--accent-dark); }
@@ -459,10 +460,10 @@
               <div class="v num" id="pwMinSellDisplay" style="font-size:19px;font-weight:700;">--</div>
             </div>
             <div class="kpi-card" style="border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
-              <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwCtfRef">周大福香港价格（手动，港元/克）</div>
+              <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwCtfRef">周大福香港价格（自动，港元/克）</div>
               <div class="v num" id="pwCtfDisplay" style="font-size:19px;font-weight:700;">--</div>
             </div>
-            <div class="kpi-card kpi-card-accent">
+            <div class="kpi-card kpi-card-accent" style="display:none;">
               <div class="k" data-i18n="pwSuggestedPrice">建议售价（港元/克，整数）</div>
               <div class="v num" id="pwSuggestDisplay">--</div>
             </div>
@@ -470,17 +471,17 @@
 
           <div class="eyebrow" style="margin-bottom:8px;"><span data-i18n="pwWeightBreakdownTitle">最低售价 · 按克重换算</span></div>
           <div class="price-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom:14px;">
-            <div class="kpi-card" style="border:1px solid var(--border); border-radius:10px; padding:12px 14px; text-align:center;">
-              <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwWeight1g">1g（每克）</div>
-              <div class="v num" id="pwPrice1g" style="font-size:20px;font-weight:800;">--</div>
+            <div class="kpi-card kpi-card-accent" style="text-align:center;">
+              <div class="k" data-i18n="pwWeight1g">1g（每克）</div>
+              <div class="v num" id="pwPrice1g">--</div>
             </div>
-            <div class="kpi-card" style="border:1px solid var(--border); border-radius:10px; padding:12px 14px; text-align:center;">
-              <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwWeight5g">5g（5 × 最低售价）</div>
-              <div class="v num" id="pwPrice5g" style="font-size:20px;font-weight:800;">--</div>
+            <div class="kpi-card kpi-card-accent" style="text-align:center;">
+              <div class="k" data-i18n="pwWeight5g">5g（5 × 最低售价）</div>
+              <div class="v num" id="pwPrice5g">--</div>
             </div>
-            <div class="kpi-card" style="border:1px solid var(--border); border-radius:10px; padding:12px 14px; text-align:center;">
-              <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwWeight10g">10g（10 × 最低售价）</div>
-              <div class="v num" id="pwPrice10g" style="font-size:20px;font-weight:800;">--</div>
+            <div class="kpi-card kpi-card-accent" style="text-align:center;">
+              <div class="k" data-i18n="pwWeight10g">10g（10 × 最低售价）</div>
+              <div class="v num" id="pwPrice10g">--</div>
             </div>
           </div>
 
@@ -564,7 +565,10 @@
 
         <div class="price-grid" style="grid-template-columns: 1fr 1fr; margin-top:14px;">
           <div class="card ctf-link-card">
-            <div class="eyebrow" style="width:100%;"><span data-i18n="ctfLinkEyebrow">周大福（香港）· 品牌金价</span><span class="src-tag" id="srcCtf">--</span></div>
+            <div class="eyebrow" style="width:100%; justify-content:center; position:relative;">
+              <span class="src-tag" id="srcCtf" style="position:absolute; left:0; top:50%; transform:translateY(-50%);">--</span>
+              <span data-i18n="ctfLinkEyebrow">周大福（香港）· 品牌金价</span>
+            </div>
             <div style="display:flex; gap:28px; justify-content:center; margin-top:14px; width:100%;">
               <div>
                 <div style="font-size:12px;color:var(--muted);margin-bottom:4px;" data-i18n="ctfSellLabel">金粒賣出價（港元/克）</div>
@@ -1113,16 +1117,16 @@
       cardCtfEyebrow:'周大福（香港）· 今日金价', cardCtfTitle:'港式品牌金价',
       ctfNeedKey:'需要配置「极速数据」授权 KEY 才能显示。前往「系统管理 → 参数设置」配置。', ctfRegister:'免费注册 →',
       ctfLinkTitle:'周大福香港金价链接', ctfLinkEyebrow:'周大福（香港）· 品牌金价', ctfCannotShow:'周大福香港实时金价无法展示，请点击链接获取', ctfLinkText:'查看官网今日金价 →',
-      ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'周大福官网',
+      ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'资料来源：周大福香港官网',
       ctfIframeHint:'如果上方显示空白，说明周大福官网出于安全策略禁止被其他网站内嵌（这是电商网站的常见做法，用于防止点击劫持），此时请使用上面的链接在新页面查看。',
       fxRateTitle:'人民币 / 港元 实时汇率', fxRateUnit:'1 人民币 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'数据来源',
       priceWarnTitle:'售价预警', priceWarnHint:'采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格',
       fieldCtfManualPrice:'周大福香港官网金价（自动获取，可手动调整，港元/克）', phCtfManualPrice:'正在自动获取，也可手动填写覆盖',
-      pwLatestCostLabel:'最新采购单价', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我们的最低售价（+6%，港元/克）', pwCtfRef:'周大福香港价格（手动，港元/克）',
+      pwLatestCostLabel:'最新采购单价', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我们的最低售价（+6%，港元/克）', pwCtfRef:'周大福香港价格（自动，港元/克）',
       pwNoPurchase:'该商品规格目前没有仍有库存的采购批次，无法计算最低售价，请先在采购管理中录入采购单（且需有剩余库存）。',
       pwRateUnavailable:'当前汇率暂时无法获取，无法折算港元，请稍后再试。',
       pwNeedManualPrice:'请在上方填写周大福香港官网今日金价后保存，才能进行对比。',
-      pwWarningText:'⚠️ 警告：按下调幅度算出的建议售价 HK$'+'{ctf}/克 低于我们的最低售价 HK$'+'{min}/克，若照此定价将不足利润要求，请留意调整幅度。',
+      pwWarningText:'⚠️ 目前的最低售价高于周大福售价，请注意。（我们的最低售价 HK$'+'{min}/克，周大福 HK$'+'{ctf}/克）',
       pwOkText:'✅ 正常：建议售价 HK$'+'{ctf}/克 不低于我们的最低售价 HK$'+'{min}/克，符合定价要求。',
       recycleWarnTitle:'回收警示', recycleWarnHint:'回收价不能高于采购价',
       recycleLogicExplain:'规则：建议回收价 = 周大福回收金价 × (1 + 价格上调幅度%)。如果算出来的建议回收价<b>高于</b>我们的最新采购单价，说明按此价格回收会亏本，系统会发出警报，提醒销售人员留意调整。',
@@ -1228,16 +1232,16 @@
       cardCtfEyebrow:'周大福（香港）· 今日金價', cardCtfTitle:'港式品牌金價',
       ctfNeedKey:'需要設定「極速數據」授權 KEY 才能顯示。請到「系統管理 → 參數設定」設定。', ctfRegister:'免費註冊 →',
       ctfLinkTitle:'周大福香港金價連結', ctfLinkEyebrow:'周大福（香港）· 品牌金價', ctfCannotShow:'周大福香港即時金價無法顯示，請點擊連結獲取', ctfLinkText:'查看官網今日金價 →',
-      ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'周大福官網',
+      ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'資料來源：周大福香港官網',
       ctfIframeHint:'如果上方顯示空白，代表周大福官網基於安全策略禁止被其他網站內嵌（這是電商網站的常見做法，用於防止點擊劫持），此時請使用上面的連結在新頁面查看。',
       fxRateTitle:'人民幣 / 港元 即時匯率', fxRateUnit:'1 人民幣 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'資料來源',
       priceWarnTitle:'售價預警', priceWarnHint:'採購價 + 採購價 × 6% = 最低售價，不能高於周大福香港官網價格',
       fieldCtfManualPrice:'周大福香港官網金價（自動獲取，可手動調整，港元/克）', phCtfManualPrice:'正在自動獲取，也可手動填寫覆蓋',
-      pwLatestCostLabel:'最新採購單價', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我們的最低售價（+6%，港元/克）', pwCtfRef:'周大福香港價格（手動，港元/克）',
+      pwLatestCostLabel:'最新採購單價', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我們的最低售價（+6%，港元/克）', pwCtfRef:'周大福香港價格（自動，港元/克）',
       pwNoPurchase:'該商品規格目前沒有仍有庫存的採購批次，無法計算最低售價，請先在採購管理中錄入採購單（且需有剩餘庫存）。',
       pwRateUnavailable:'目前匯率暫時無法取得，無法折算港元，請稍後再試。',
       pwNeedManualPrice:'請在上方填寫周大福香港官網今日金價後儲存，才能進行比對。',
-      pwWarningText:'⚠️ 警告：按下調幅度算出的建議售價 HK$'+'{ctf}/克 低於我們的最低售價 HK$'+'{min}/克，若照此定價將不足利潤要求，請留意調整幅度。',
+      pwWarningText:'⚠️ 目前的最低售價高於周大福售價，請注意。（我們的最低售價 HK$'+'{min}/克，周大福 HK$'+'{ctf}/克）',
       pwOkText:'✅ 正常：建議售價 HK$'+'{ctf}/克 不低於我們的最低售價 HK$'+'{min}/克，符合定價要求。',
       recycleWarnTitle:'回收警示', recycleWarnHint:'回收價不能高於採購價',
       recycleLogicExplain:'規則：建議回收價 = 周大福回收金價 × (1 + 價格上調幅度%)。如果算出來的建議回收價<b>高於</b>我們的最新採購單價，說明按此價格回收會虧本，系統會發出警報，提醒銷售人員留意調整。',
@@ -1342,16 +1346,16 @@
       cardCtfEyebrow:'Chow Tai Fook (HK) · Today\u2019s Price', cardCtfTitle:'HK Brand Gold Price',
       ctfNeedKey:'Requires a "Jisuapi" APPKEY to display. Configure it under System → Parameters.', ctfRegister:'Register free →',
       ctfLinkTitle:'Chow Tai Fook HK Gold Price Link', ctfLinkEyebrow:'Chow Tai Fook (HK) \u00b7 Brand Price', ctfCannotShow:'Chow Tai Fook HK live gold price can\u2019t be shown here \u2014 use the link below', ctfLinkText:'View today\u2019s price (official site) →',
-      ctfSellLabel:'Gold Pellet Sell (HKD/g)', ctfBuyLabel:'Gold Pellet Buy (HKD/g)', srcCtfOfficial:'Chow Tai Fook official site',
+      ctfSellLabel:'Gold Pellet Sell (HKD/g)', ctfBuyLabel:'Gold Pellet Buy (HKD/g)', srcCtfOfficial:'Source: Chow Tai Fook HK official site',
       ctfIframeHint:'If the box above is blank, Chow Tai Fook\u2019s site is blocking embedding for security reasons (standard practice for e-commerce sites, to prevent clickjacking) \u2014 use the link above to open it in a new page instead.',
       fxRateTitle:'CNY / HKD Live Exchange Rate', fxRateUnit:'1 CNY = ? HKD', unitHkdLabel:'HKD (HKD)', dataSourceLabel:'Data source',
       priceWarnTitle:'Selling Price Alert', priceWarnHint:'Purchase price + purchase price \u00d7 6% = minimum selling price, must not be above Chow Tai Fook HK\u2019s official price',
       fieldCtfManualPrice:'Chow Tai Fook HK official price (auto-fetched, editable, HKD/g)', phCtfManualPrice:'Fetching automatically \u2014 you can also override manually',
-      pwLatestCostLabel:'Latest Purchase Cost', pwCostUnitOnly:'(HKD/g)', pwCostUnitWithMarkup:'(+{pct}%, HKD/g)', pwMinSell:'Our Minimum Selling Price (+6%, HKD/g)', pwCtfRef:'Chow Tai Fook HK Price (manual, HKD/g)',
+      pwLatestCostLabel:'Latest Purchase Cost', pwCostUnitOnly:'(HKD/g)', pwCostUnitWithMarkup:'(+{pct}%, HKD/g)', pwMinSell:'Our Minimum Selling Price (+6%, HKD/g)', pwCtfRef:'Chow Tai Fook HK Price (auto, HKD/g)',
       pwNoPurchase:'No purchase batch with remaining stock for this product \u2014 add one under Purchasing (with stock left).',
       pwRateUnavailable:'The current exchange rate isn\u2019t available right now, so HKD conversion isn\u2019t possible \u2014 try again shortly.',
       pwNeedManualPrice:'Enter and save Chow Tai Fook HK\u2019s official price above to run the comparison.',
-      pwWarningText:'\u26a0\ufe0f Warning: the suggested selling price (computed with the decrease margin) HK{ctf}/g is below our minimum selling price HK{min}/g \u2014 this would fall short of required margin, please review.',
+      pwWarningText:'\u26a0\ufe0f Our minimum selling price is currently above Chow Tai Fook\u2019s price \u2014 please review. (Our minimum HK{min}/g, Chow Tai Fook HK{ctf}/g)',
       pwOkText:'\u2705 OK: the suggested selling price HK{ctf}/g is not below our minimum selling price HK{min}/g \u2014 meets pricing requirements.',
       recycleWarnTitle:'Recycle Price Alert', recycleWarnHint:'Buyback price must not exceed our purchase price',
       recycleLogicExplain:'Rule: suggested buyback price = Chow Tai Fook\u2019s recycle price \u00d7 (1 + price increase%). If the resulting suggested price is <b>above</b> our latest purchase cost, buying back at that price would be at a loss, so the system raises an alert.',
@@ -2409,6 +2413,7 @@
       $('pwPrice1g').textContent = '--';
       $('pwPrice5g').textContent = '--';
       $('pwPrice10g').textContent = '--';
+      box.style.display = '';
       box.className = 'price-placeholder pw-neutral';
       box.textContent = t('pwRateUnavailable');
       reasonBox.textContent = '';
@@ -2431,6 +2436,7 @@
     if (savedPrice == null){
       $('pwCtfDisplay').textContent = '--';
       $('pwSuggestDisplay').textContent = 'HK$' + Math.ceil(minSellHkd);
+      box.style.display = '';
       box.className = 'price-placeholder pw-neutral';
       box.textContent = t('pwNeedManualPrice');
       reasonBox.textContent = '';
@@ -2439,27 +2445,23 @@
 
     $('pwCtfDisplay').textContent = 'HK$' + fmtNum(savedPrice, 2);
 
-    // Suggested selling price — rule: 建议售价 = 周大福香港官网金价 × (1 − 价格下调幅度%).
-    // No clamping/ceiling here — it varies freely and directly with the edge%, so it keeps
-    // responding at any percentage instead of getting stuck once it crosses some threshold.
-    // Our own minimum selling price (cost + 6%) is only used to decide whether to alert:
-    // if the suggested price would fall below that floor, selling at it would eat into
-    // required margin, so staff are warned.
-    const suggested = Math.ceil(savedPrice * (1 - edgePct/100));
-    const suggestedBelowMinSell = suggested < minSellHkd;
+    // New rule: compare 我们的最低售价 directly against 周大福香港价格 (no more edge%-based
+    // "建议售价" step in between). If our floor price has crept above what Chow Tai Fook
+    // itself charges, that's worth flagging — selling above the market leader's own price
+    // risks losing customers. If we're still at or below CTF's price, no alert is needed.
+    const minSellAboveCtf = minSellHkd > savedPrice;
+    $('pwSuggestDisplay').textContent = 'HK$' + Math.ceil(minSellHkd);
 
-    $('pwSuggestDisplay').textContent = 'HK$' + suggested;
-
-    if (suggestedBelowMinSell){
+    if (minSellAboveCtf){
+      box.style.display = '';
       box.className = 'price-placeholder pw-danger';
-      box.textContent = t('pwWarningText').replace('{min}', fmtNum(minSellHkd,2)).replace('{ctf}', fmtNum(suggested,2));
+      box.textContent = t('pwWarningText').replace('{min}', fmtNum(minSellHkd,2)).replace('{ctf}', fmtNum(savedPrice,2));
     } else {
-      box.className = 'price-placeholder pw-ok';
-      box.textContent = t('pwOkText').replace('{min}', fmtNum(minSellHkd,2)).replace('{ctf}', fmtNum(suggested,2));
+      box.style.display = 'none';
+      box.className = 'price-placeholder pw-neutral';
+      box.textContent = '';
     }
-
-    const reasonKey = suggestedBelowMinSell ? 'pwSuggestReasonEdgeClamped' : 'pwSuggestReasonEdge';
-    reasonBox.textContent = t(reasonKey).replace('{edge}', edgePct).replace('{price}', suggested);
+    reasonBox.textContent = '';
   }
   $('pwProduct').addEventListener('change', renderPriceWarning);
   $('pwEdgePct').addEventListener('input', renderPriceWarning);
@@ -2509,6 +2511,7 @@
       $('rwSuggestDisplay').textContent = '--';
       $('rwSuggestAboveCostNote').style.display = 'none';
       $('rwSuggestBelowCostNote').style.display = 'none';
+      box.style.display = '';
       box.className = 'price-placeholder pw-neutral';
       box.textContent = t('pwRateUnavailable');
       reasonBox.textContent = '';
