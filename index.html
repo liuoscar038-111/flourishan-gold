@@ -115,6 +115,7 @@
   .alert-banner-title .icon{ font-size:20px; }
   .alert-banner-title .alert-banner-hint{ font-size:11.5px; font-weight:500; color:rgba(255,255,255,0.85); }
   .alert-banner-recycle{ background: linear-gradient(90deg, #3E8564, #2C6350); box-shadow: 0 6px 16px rgba(62,133,100,0.28); }
+  .alert-banner-brand{ background: linear-gradient(90deg, var(--accent), var(--accent-dark)); box-shadow: 0 6px 16px rgba(169,124,59,0.28); }
   .section-title:first-child{ margin-top:0; }
   .section-title .hint{ font-size:11.5px; color: var(--muted); font-weight:400; }
 
@@ -431,7 +432,7 @@
       <!-- ================= HOME ================= -->
       <section class="page active" id="page-home">
 
-        <div class="alert-banner-title"><span class="icon">💰</span><span data-i18n="priceWarnTitle">售价预警</span><span class="alert-banner-hint" data-i18n="priceWarnHint">采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格</span></div>
+        <div class="alert-banner-title alert-banner-brand"><span class="icon">💰</span><span data-i18n="priceWarnTitle">售价预警</span><span class="alert-banner-hint"><span data-i18n="priceWarnHintPrefix">今日金价（更新时间</span> <span id="pwHintUpdateTime">--</span><span data-i18n="priceWarnHintFormula">） 上交所金价 × 汇率 ×（1+1.15%）×（1+6%）= 我们的最低售价</span></span></div>
         <div class="card panel">
           <div class="form-grid" style="margin-bottom:14px; display:none;">
             <div class="field">
@@ -548,7 +549,7 @@
               <div class="k" data-i18n="convertedHkdLabel">折合港元/克</div>
               <div class="v num" id="priceSgeHkd">--</div>
             </div>
-            <div class="price-meta"><span data-i18n="updatedAt">更新时间</span> <span id="metaSge">--</span></div>
+            <div class="price-meta" style="text-align:left;"><span data-i18n="updatedAt">更新时间</span> <span id="metaSge">--</span></div>
           </div>
 
           <div class="card price-card">
@@ -560,7 +561,7 @@
               <div class="k" data-i18n="convertedHkdLabel">折合港元/克</div>
               <div class="v num" id="priceLondonHkd">--</div>
             </div>
-            <div class="price-meta"><span data-i18n="updatedAt">更新时间</span> <span id="metaLondon">--</span></div>
+            <div class="price-meta" style="text-align:left;"><span data-i18n="updatedAt">更新时间</span> <span id="metaLondon">--</span></div>
           </div>
         </div>
 
@@ -568,7 +569,7 @@
           <div class="card ctf-link-card">
             <div class="eyebrow" style="width:100%; justify-content:center; position:relative;">
               <span class="src-tag" id="srcCtf" style="position:absolute; left:0; top:50%; transform:translateY(-50%);">--</span>
-              <span data-i18n="ctfLinkEyebrow">周大福（香港）· 品牌金价</span>
+              <span data-i18n="ctfLinkEyebrow">周大福（香港）· 金价</span>
             </div>
             <div style="display:flex; gap:28px; justify-content:center; margin-top:14px; width:100%;">
               <div>
@@ -580,7 +581,7 @@
                 <div class="v num" id="ctfBuyDisplay" style="font-size:23px;font-weight:800;color:var(--ink);">--</div>
               </div>
             </div>
-            <div class="price-meta" id="ctfMeta" style="text-align:center;margin-top:10px;"></div>
+            <div class="price-meta" id="ctfMeta" style="text-align:left;margin-top:10px;"></div>
             <a class="ctf-link-btn" href="https://www.chowtaifook.com/zh-hk/eshop/realtime-gold-price.html" target="_blank" rel="noopener" data-i18n="ctfLinkText" style="margin-top:14px;">查看官网今日金价 →</a>
           </div>
 
@@ -1117,11 +1118,12 @@
       cardLondonEyebrow:'伦敦金 · 国际金价参考', cardLondonTitle:'伦敦金（换算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金价', cardCtfTitle:'港式品牌金价',
       ctfNeedKey:'需要配置「极速数据」授权 KEY 才能显示。前往「系统管理 → 参数设置」配置。', ctfRegister:'免费注册 →',
-      ctfLinkTitle:'周大福香港金价链接', ctfLinkEyebrow:'周大福（香港）· 品牌金价', ctfCannotShow:'周大福香港实时金价无法展示，请点击链接获取', ctfLinkText:'查看官网今日金价 →',
+      ctfLinkTitle:'周大福香港金价链接', ctfLinkEyebrow:'周大福（香港）· 金价', ctfCannotShow:'周大福香港实时金价无法展示，请点击链接获取', ctfLinkText:'查看官网今日金价 →',
       ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'资料来源：周大福香港官网',
       ctfIframeHint:'如果上方显示空白，说明周大福官网出于安全策略禁止被其他网站内嵌（这是电商网站的常见做法，用于防止点击劫持），此时请使用上面的链接在新页面查看。',
       fxRateTitle:'人民币 / 港元 实时汇率', fxRateUnit:'1 人民币 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'数据来源',
       priceWarnTitle:'售价预警', priceWarnHint:'采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格',
+      priceWarnHintPrefix:'今日金价（更新时间', priceWarnHintFormula:'） 上交所金价 × 汇率 ×（1+1.15%）×（1+6%）= 我们的最低售价',
       fieldCtfManualPrice:'周大福香港官网金价（自动获取，可手动调整，港元/克）', phCtfManualPrice:'正在自动获取，也可手动填写覆盖',
       pwLatestCostLabel:'最新采购单价', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我们的最低售价（+6%，港元/克）', pwCtfRef:'周大福香港价格（自动，港元/克）',
       pwNoPurchase:'该商品规格目前没有仍有库存的采购批次，无法计算最低售价，请先在采购管理中录入采购单（且需有剩余库存）。',
@@ -1232,11 +1234,12 @@
       cardLondonEyebrow:'倫敦金 · 國際金價參考', cardLondonTitle:'倫敦金（換算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金價', cardCtfTitle:'港式品牌金價',
       ctfNeedKey:'需要設定「極速數據」授權 KEY 才能顯示。請到「系統管理 → 參數設定」設定。', ctfRegister:'免費註冊 →',
-      ctfLinkTitle:'周大福香港金價連結', ctfLinkEyebrow:'周大福（香港）· 品牌金價', ctfCannotShow:'周大福香港即時金價無法顯示，請點擊連結獲取', ctfLinkText:'查看官網今日金價 →',
+      ctfLinkTitle:'周大福香港金價連結', ctfLinkEyebrow:'周大福（香港）· 金價', ctfCannotShow:'周大福香港即時金價無法顯示，請點擊連結獲取', ctfLinkText:'查看官網今日金價 →',
       ctfSellLabel:'金粒賣出價（港元/克）', ctfBuyLabel:'金粒買入價（港元/克）', srcCtfOfficial:'資料來源：周大福香港官網',
       ctfIframeHint:'如果上方顯示空白，代表周大福官網基於安全策略禁止被其他網站內嵌（這是電商網站的常見做法，用於防止點擊劫持），此時請使用上面的連結在新頁面查看。',
       fxRateTitle:'人民幣 / 港元 即時匯率', fxRateUnit:'1 人民幣 = ? 港元', unitHkdLabel:'港元（HKD）', dataSourceLabel:'資料來源',
       priceWarnTitle:'售價預警', priceWarnHint:'採購價 + 採購價 × 6% = 最低售價，不能高於周大福香港官網價格',
+      priceWarnHintPrefix:'今日金價（更新時間', priceWarnHintFormula:'） 上交所金價 × 匯率 ×（1+1.15%）×（1+6%）= 我們的最低售價',
       fieldCtfManualPrice:'周大福香港官網金價（自動獲取，可手動調整，港元/克）', phCtfManualPrice:'正在自動獲取，也可手動填寫覆蓋',
       pwLatestCostLabel:'最新採購單價', pwCostUnitOnly:'（港元/克）', pwCostUnitWithMarkup:'(+{pct}%，港元/克）', pwMinSell:'我們的最低售價（+6%，港元/克）', pwCtfRef:'周大福香港價格（自動，港元/克）',
       pwNoPurchase:'該商品規格目前沒有仍有庫存的採購批次，無法計算最低售價，請先在採購管理中錄入採購單（且需有剩餘庫存）。',
@@ -1346,11 +1349,12 @@
       cardLondonEyebrow:'London Gold · Intl. reference', cardLondonTitle:'London Gold (converted CNY/g)', unitUsdOz:'USD/oz',
       cardCtfEyebrow:'Chow Tai Fook (HK) · Today\u2019s Price', cardCtfTitle:'HK Brand Gold Price',
       ctfNeedKey:'Requires a "Jisuapi" APPKEY to display. Configure it under System → Parameters.', ctfRegister:'Register free →',
-      ctfLinkTitle:'Chow Tai Fook HK Gold Price Link', ctfLinkEyebrow:'Chow Tai Fook (HK) \u00b7 Brand Price', ctfCannotShow:'Chow Tai Fook HK live gold price can\u2019t be shown here \u2014 use the link below', ctfLinkText:'View today\u2019s price (official site) →',
+      ctfLinkTitle:'Chow Tai Fook HK Gold Price Link', ctfLinkEyebrow:'Chow Tai Fook (HK) \u00b7 Gold Price', ctfCannotShow:'Chow Tai Fook HK live gold price can\u2019t be shown here \u2014 use the link below', ctfLinkText:'View today\u2019s price (official site) →',
       ctfSellLabel:'Gold Pellet Sell (HKD/g)', ctfBuyLabel:'Gold Pellet Buy (HKD/g)', srcCtfOfficial:'Source: Chow Tai Fook HK official site',
       ctfIframeHint:'If the box above is blank, Chow Tai Fook\u2019s site is blocking embedding for security reasons (standard practice for e-commerce sites, to prevent clickjacking) \u2014 use the link above to open it in a new page instead.',
       fxRateTitle:'CNY / HKD Live Exchange Rate', fxRateUnit:'1 CNY = ? HKD', unitHkdLabel:'HKD (HKD)', dataSourceLabel:'Data source',
       priceWarnTitle:'Selling Price Alert', priceWarnHint:'Purchase price + purchase price \u00d7 6% = minimum selling price, must not be above Chow Tai Fook HK\u2019s official price',
+      priceWarnHintPrefix:'Today\u2019s gold price (updated', priceWarnHintFormula:') SGE price \u00d7 FX rate \u00d7 (1+1.15%) \u00d7 (1+6%) = our minimum selling price',
       fieldCtfManualPrice:'Chow Tai Fook HK official price (auto-fetched, editable, HKD/g)', phCtfManualPrice:'Fetching automatically \u2014 you can also override manually',
       pwLatestCostLabel:'Latest Purchase Cost', pwCostUnitOnly:'(HKD/g)', pwCostUnitWithMarkup:'(+{pct}%, HKD/g)', pwMinSell:'Our Minimum Selling Price (+6%, HKD/g)', pwCtfRef:'Chow Tai Fook HK Price (auto, HKD/g)',
       pwNoPurchase:'No purchase batch with remaining stock for this product \u2014 add one under Purchasing (with stock left).',
@@ -2426,6 +2430,7 @@
     const minSellHkd = costHkd * (1 + MIN_SELL_MARKUP);
     $('pwCostDisplay').textContent = 'HK$' + fmtNum(costHkd, 2);
     $('pwMinSellDisplay').textContent = 'HK$' + fmtNum(minSellHkd, 2);
+    $('pwHintUpdateTime').textContent = new Date().toLocaleTimeString('zh-CN', {hour12:false});
 
     // 1g/5g/10g breakdown — always based on 我们的最低售价 (minSellHkd), independent of
     // which product spec happens to be selected (the hidden pwProduct field is only used
