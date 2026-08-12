@@ -431,7 +431,7 @@
 
         <div class="alert-banner-title"><span class="icon">💰</span><span data-i18n="priceWarnTitle">售价预警</span><span class="alert-banner-hint" data-i18n="priceWarnHint">采购价 + 采购价 × 6% = 最低售价，不能高于周大福香港官网价格</span></div>
         <div class="card panel">
-          <div class="form-grid" style="margin-bottom:14px;">
+          <div class="form-grid" style="margin-bottom:14px; display:none;">
             <div class="field">
               <label data-i18n="fieldProduct">商品规格</label>
               <select id="pwProduct"></select>
@@ -465,6 +465,22 @@
             <div class="kpi-card kpi-card-accent">
               <div class="k" data-i18n="pwSuggestedPrice">建议售价（港元/克，整数）</div>
               <div class="v num" id="pwSuggestDisplay">--</div>
+            </div>
+          </div>
+
+          <div class="eyebrow" style="margin-bottom:8px;"><span data-i18n="pwWeightBreakdownTitle">最低售价 · 按克重换算</span></div>
+          <div class="price-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom:14px;">
+            <div class="kpi-card" style="border:1px solid var(--border); border-radius:10px; padding:12px 14px; text-align:center;">
+              <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwWeight1g">1g（每克）</div>
+              <div class="v num" id="pwPrice1g" style="font-size:20px;font-weight:800;">--</div>
+            </div>
+            <div class="kpi-card" style="border:1px solid var(--border); border-radius:10px; padding:12px 14px; text-align:center;">
+              <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwWeight5g">5g（5 × 最低售价）</div>
+              <div class="v num" id="pwPrice5g" style="font-size:20px;font-weight:800;">--</div>
+            </div>
+            <div class="kpi-card" style="border:1px solid var(--border); border-radius:10px; padding:12px 14px; text-align:center;">
+              <div class="k" style="font-size:12px;color:var(--muted);margin-bottom:6px;" data-i18n="pwWeight10g">10g（10 × 最低售价）</div>
+              <div class="v num" id="pwPrice10g" style="font-size:20px;font-weight:800;">--</div>
             </div>
           </div>
 
@@ -1116,6 +1132,7 @@
       rwOkText:'✅ 正常：建议回收价 HK$'+'{rw}/克 不高于我们的采购单价 HK$'+'{cost}/克，按此价格回收不会亏损。',
       fieldEdgePctUp:'价格下调幅度（%，默认1%）', fieldEdgePctDown:'价格上调幅度（%，默认1%）',
       pwSuggestedPrice:'建议售价（港元/克，整数）',
+      pwWeightBreakdownTitle:'最低售价 · 按克重换算', pwWeight1g:'1g（每克）', pwWeight5g:'5g（5 × 最低售价）', pwWeight10g:'10g（10 × 最低售价）',
       pwSuggestReasonEdge:'按周大福价格下调 {edge}% 计算，建议售价 HK$'+'{price}/克，不低于我们的最低售价，符合定价要求。',
       pwSuggestReasonFloor:'周大福价格未超过最低售价，本次未使用价格优势幅度（{edge}%无生效空间），直接按最低售价 HK$'+'{price}/克 执行。',
       pwSuggestReasonEdgeClamped:'按周大福价格下调 {edge}% 计算，建议售价 HK$'+'{price}/克，已低于我们的最低售价，若照此定价将不足利润要求，请留意调整降价幅度。',
@@ -1230,6 +1247,7 @@
       rwOkText:'✅ 正常：建議回收價 HK$'+'{rw}/克 不高於我們的採購單價 HK$'+'{cost}/克，按此價格回收不會虧損。',
       fieldEdgePctUp:'價格下調幅度（%，預設1%）', fieldEdgePctDown:'價格上調幅度（%，預設1%）',
       pwSuggestedPrice:'建議售價（港元/克，整數）',
+      pwWeightBreakdownTitle:'最低售價 · 按克重換算', pwWeight1g:'1g（每克）', pwWeight5g:'5g（5 × 最低售價）', pwWeight10g:'10g（10 × 最低售價）',
       pwSuggestReasonEdge:'按周大福價格下調 {edge}% 計算，建議售價 HK$'+'{price}/克，不低於我們的最低售價，符合定價要求。',
       pwSuggestReasonFloor:'周大福價格未超過最低售價，本次未使用價格優勢幅度（{edge}%無生效空間），直接按最低售價 HK$'+'{price}/克 執行。',
       pwSuggestReasonEdgeClamped:'按周大福價格下調 {edge}% 計算，建議售價 HK$'+'{price}/克，已低於我們的最低售價，若照此定價將不足利潤要求，請留意調整降價幅度。',
@@ -1343,6 +1361,7 @@
       rwOkText:'\u2705 OK: the suggested buyback price HK{rw}/g is not above our purchase cost HK{cost}/g \u2014 safe to proceed.',
       fieldEdgePctUp:'Price Decrease Margin (%, default 1%)', fieldEdgePctDown:'Price Increase Margin (%, default 1%)',
       pwSuggestedPrice:'Suggested Selling Price (HKD/g, whole number)',
+      pwWeightBreakdownTitle:'Minimum Selling Price \u00b7 By Weight', pwWeight1g:'1g (per gram)', pwWeight5g:'5g (5 \u00d7 minimum price)', pwWeight10g:'10g (10 \u00d7 minimum price)',
       pwSuggestReasonEdge:'Computed as Chow Tai Fook\u2019s price minus {edge}%, the suggested selling price HK{price}/g is not below our minimum selling price \u2014 meets pricing requirements.',
       pwSuggestReasonFloor:'Chow Tai Fook\u2019s price doesn\u2019t exceed our minimum \u2014 the {edge}% edge doesn\u2019t apply here, using the minimum HK{price}/g directly.',
       pwSuggestReasonEdgeClamped:'Computed as Chow Tai Fook\u2019s price minus {edge}%, the suggested selling price HK{price}/g is below our minimum selling price \u2014 this would fall short of required margin, please review the decrease margin.',
@@ -2387,6 +2406,9 @@
       $('pwMinSellDisplay').textContent = '--';
       $('pwCtfDisplay').textContent = (savedPrice != null) ? ('HK$'+fmtNum(savedPrice,2)) : '--';
       $('pwSuggestDisplay').textContent = '--';
+      $('pwPrice1g').textContent = '--';
+      $('pwPrice5g').textContent = '--';
+      $('pwPrice10g').textContent = '--';
       box.className = 'price-placeholder pw-neutral';
       box.textContent = t('pwRateUnavailable');
       reasonBox.textContent = '';
@@ -2398,6 +2420,13 @@
     const minSellHkd = costHkd * (1 + MIN_SELL_MARKUP);
     $('pwCostDisplay').textContent = 'HK$' + fmtNum(costHkd, 2);
     $('pwMinSellDisplay').textContent = 'HK$' + fmtNum(minSellHkd, 2);
+
+    // 1g/5g/10g breakdown — always based on 我们的最低售价 (minSellHkd), independent of
+    // which product spec happens to be selected (the hidden pwProduct field is only used
+    // internally to key the CTF-price storage now, not to drive this display).
+    $('pwPrice1g').textContent = 'HK$' + fmtNum(minSellHkd, 2);
+    $('pwPrice5g').textContent = 'HK$' + fmtNum(minSellHkd * 5, 2);
+    $('pwPrice10g').textContent = 'HK$' + fmtNum(minSellHkd * 10, 2);
 
     if (savedPrice == null){
       $('pwCtfDisplay').textContent = '--';
