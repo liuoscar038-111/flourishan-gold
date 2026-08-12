@@ -121,7 +121,7 @@
   /* Price cards */
   .price-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
   @media (max-width:900px){ .price-grid{ grid-template-columns:1fr; } }
-  .price-card{ padding:16px 18px; position:relative; border-top:3px solid var(--accent); }
+  .price-card{ padding:16px 18px; position:relative; border-top:3px solid var(--accent); text-align:center; }
   .kpi-card{ border-top:3px solid var(--accent); }
   .fx-card, .ctf-link-card{ border-top:3px solid var(--accent); }
   .price-card .eyebrow{ display:flex; align-items:center; justify-content:space-between; font-size:11px; color: var(--muted); margin-bottom:10px; }
@@ -140,6 +140,7 @@
     padding:8px 10px; border-radius:8px; background: var(--accent-soft); border:1px dashed rgba(169,124,59,0.3);
     text-align:center;
   }
+  .price-card .converted.converted-plain{ background:none; border:none; padding:4px 0; }
   .price-card .converted .k{ font-size:10.5px; color: var(--accent-dark); letter-spacing:0.5px; margin-bottom:2px; }
   .price-card .converted .v{ font-size:16px; font-weight:700; color: var(--accent-dark); }
   .price-card .price-placeholder{ font-size:12px; color: var(--muted); line-height:1.6; }
@@ -472,15 +473,15 @@
           <div class="eyebrow" style="margin-bottom:8px;"><span data-i18n="pwWeightBreakdownTitle">最低售价 · 按克重换算</span></div>
           <div class="price-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom:14px;">
             <div class="kpi-card kpi-card-accent" style="text-align:center;">
-              <div class="k" data-i18n="pwWeight1g">1g（每克）</div>
+              <div class="k" style="font-size:15px;font-weight:700;" data-i18n="pwWeight1g">1g（每克）</div>
               <div class="v num" id="pwPrice1g">--</div>
             </div>
             <div class="kpi-card kpi-card-accent" style="text-align:center;">
-              <div class="k" data-i18n="pwWeight5g">5g（5 × 最低售价）</div>
+              <div class="k" style="font-size:15px;font-weight:700;" data-i18n="pwWeight5g">5g（5 × 最低售价）</div>
               <div class="v num" id="pwPrice5g">--</div>
             </div>
             <div class="kpi-card kpi-card-accent" style="text-align:center;">
-              <div class="k" data-i18n="pwWeight10g">10g（10 × 最低售价）</div>
+              <div class="k" style="font-size:15px;font-weight:700;" data-i18n="pwWeight10g">10g（10 × 最低售价）</div>
               <div class="v num" id="pwPrice10g">--</div>
             </div>
           </div>
@@ -543,7 +544,7 @@
             <h3 data-i18n="cardSgeTitle">上交所金价</h3>
             <div><span class="price-main num" id="priceSge">--</span><span class="price-unit" data-i18n="unitYuanGram">元/克</span></div>
             <span class="price-change" id="changeSge"></span>
-            <div class="converted" style="margin-top:12px;">
+            <div class="converted converted-plain" style="margin-top:12px;">
               <div class="k" data-i18n="convertedHkdLabel">折合港元/克</div>
               <div class="v num" id="priceSgeHkd">--</div>
             </div>
@@ -555,7 +556,7 @@
             <h3 data-i18n="cardLondonTitle">伦敦金（换算 元/克）</h3>
             <div><span class="price-main num" id="priceLondon">--</span><span class="price-unit" data-i18n="unitYuanGram">元/克</span></div>
             <div class="price-meta num" id="metaLondonUsd">-- <span data-i18n="unitUsdOz">美元/盎司</span></div>
-            <div class="converted" style="margin-top:12px;">
+            <div class="converted converted-plain" style="margin-top:12px;">
               <div class="k" data-i18n="convertedHkdLabel">折合港元/克</div>
               <div class="v num" id="priceLondonHkd">--</div>
             </div>
