@@ -1118,7 +1118,7 @@
       loginBtn:'登录', loginHintText:'如果忘记密码，请联系管理员重置。', logoutBtn:'退出登录',
       accountSectionTitle:'登录账号设置', fieldNewUsername:'账号', fieldNewPassword:'新密码', phKeepCurrent:'留空则不修改',
       alertAccountSaved:'账号设置已保存', alertUsernameRequired:'账号不能为空',
-      homePriceTitle:'实时金价', homePriceHint:'上交所每 5 秒 · 伦敦金每 20 秒自动刷新', priceDelayNote:'（数据延迟，仅作参考）',
+      homePriceTitle:'实时金价', homePriceHint:'上交所 / 伦敦金均每 5 秒自动刷新', priceDelayNote:'（数据延迟，仅作参考）',
       cardSgeEyebrow:'上海黄金交易所 · Au9999', cardSgeTitle:'上交所金价', unitYuanGram:'元/克', updatedAt:'更新时间', convertedHkdLabel:'折合港元/克',
       cardLondonEyebrow:'伦敦金 · 国际金价参考', cardLondonTitle:'伦敦金（换算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金价', cardCtfTitle:'港式品牌金价',
@@ -1234,7 +1234,7 @@
       loginBtn:'登入', loginHintText:'如果忘記密碼，請聯繫管理員重設。', logoutBtn:'登出',
       accountSectionTitle:'登入帳號設定', fieldNewUsername:'帳號', fieldNewPassword:'新密碼', phKeepCurrent:'留空則不修改',
       alertAccountSaved:'帳號設定已儲存', alertUsernameRequired:'帳號不能為空',
-      homePriceTitle:'即時金價', homePriceHint:'上交所每 5 秒 · 倫敦金每 20 秒自動更新', priceDelayNote:'（資料延遲，僅供參考）',
+      homePriceTitle:'即時金價', homePriceHint:'上交所 / 倫敦金均每 5 秒自動更新', priceDelayNote:'（資料延遲，僅供參考）',
       cardSgeEyebrow:'上海黃金交易所 · Au9999', cardSgeTitle:'上交所金價', unitYuanGram:'元/克', updatedAt:'更新時間', convertedHkdLabel:'折合港元/克',
       cardLondonEyebrow:'倫敦金 · 國際金價參考', cardLondonTitle:'倫敦金（換算 元/克）', unitUsdOz:'美元/盎司',
       cardCtfEyebrow:'周大福（香港）· 今日金價', cardCtfTitle:'港式品牌金價',
@@ -1793,6 +1793,8 @@
       $('priceSge').textContent = fmtNum(price, 2);
       $('srcSge').textContent = srcLabel;
       $('metaSge').textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false});
+      const sgeHkd = fromCnyAmount(price, 'HKD');
+      $('priceSgeHkd').textContent = sgeHkd !== null ? ('HK$' + fmtNum(sgeHkd, 2)) : '--';
       // These all depend on sgePriceGlobal, so recompute them right away rather than
       // waiting for the slower main cycle to get around to it.
       renderHomeKpisAndChart();
@@ -1802,6 +1804,34 @@
       $('srcSge').textContent = t('srcUnavailable');
     } finally {
       sgeRefreshInProgress = false;
+    }
+  }
+
+  // 伦敦金现货价同样波动较快，值得跟上交所一样保持较高的刷新频率——独立于汇率/周大福
+  // 这两个"一天只变几次"的慢档数据。换算成人民币/港元时用的是缓存的 cnyPerUsdGlobal
+  // （由主刷新周期里的慢档汇率抓取维护），不会因为汇率本身没有每次都重新抓取而中断。
+  let londonRefreshInProgress = false;
+  async function refreshLondonPrice(){
+    if (londonRefreshInProgress) return;
+    londonRefreshInProgress = true;
+    try{
+      const j = await fetchJson(EASTMONEY_LONDON_URL);
+      if (!j || !j.data || j.data.f43 == null) throw new Error('no data');
+      const londonUsd = j.data.f43;
+      if (cnyPerUsdGlobal !== null){
+        const cny = londonUsd * cnyPerUsdGlobal / OZ_TO_G;
+        londonCnyGlobal = cny;
+        $('priceLondon').textContent = fmtNum(cny, 2);
+        $('metaLondonUsd').textContent = fmtNum(londonUsd,2) + " " + t('unitUsdOz') + " · FX " + fmtNum(cnyPerUsdGlobal,4);
+        const londonHkd = fromCnyAmount(cny, 'HKD');
+        $('priceLondonHkd').textContent = londonHkd !== null ? ('HK$' + fmtNum(londonHkd, 2)) : '--';
+      }
+      $('srcLondon').textContent = t('srcEastmoney');
+      $('metaLondon').textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false});
+    }catch(e){
+      $('srcLondon').textContent = t('srcUnavailable');
+    } finally {
+      londonRefreshInProgress = false;
     }
   }
 
@@ -1842,17 +1872,12 @@
     }
     }
 
-    // London -> CNY/g — 东方财富网，永远每次都刷新（现货金价本身波动较快，值得保持新鲜）
-    try{
-      const j = await fetchJson(EASTMONEY_LONDON_URL);
-      if (!j || !j.data || j.data.f43 == null) throw new Error('no data');
-      const londonUsd = j.data.f43;
-
-      // 汇率 — 慢档：银行汇率一天只更新几次，没必要每 20 秒都重新抓一次去打银行的网站，
-      // 跟周大福价格一样，只在每第 3 轮（约 60 秒）才重新抓取一次；其余时间沿用上次抓到
-      // 的 hkdCnyRateGlobal / cnyPerUsdGlobal，London 现货价照样能实时换算成港元，不会因
-      // 为没刷新汇率而卡住不动。
-      if (refreshTick % 3 === 0){
+    // 汇率 — 慢档：银行汇率一天只更新几次，没必要每 20 秒都重新抓一次去打银行的网站，
+    // 跟周大福价格一样，只在每第 3 轮（约 60 秒）才重新抓取一次；其余时间沿用上次抓到
+    // 的 hkdCnyRateGlobal / cnyPerUsdGlobal，伦敦金现货价照样能实时换算成港元，不会因
+    // 为没刷新汇率而卡住不动。
+    if (refreshTick % 3 === 0){
+      try{
         const [fxRateResult, marketResult] = await Promise.allSettled([
           fetchJson('/api/fx-rate'),
           fetchJson(FX_URL),
@@ -1881,25 +1906,10 @@
           $('fxRateDisplay').textContent = '--';
           $('srcFxRate').textContent = t('srcUnavailable');
         }
+      }catch(e){
+        $('srcFxRate').textContent = t('srcUnavailable');
       }
-
-      if (cnyPerUsdGlobal !== null){
-        const cny = londonUsd * cnyPerUsdGlobal / OZ_TO_G;
-        londonCnyGlobal = cny;
-        $('priceLondon').textContent = fmtNum(cny, 2);
-        $('metaLondonUsd').textContent = fmtNum(londonUsd,2) + " " + t('unitUsdOz') + " · FX " + fmtNum(cnyPerUsdGlobal,4);
-      }
-      $('srcLondon').textContent = t('srcEastmoney');
-      $('metaLondon').textContent = new Date().toLocaleTimeString('zh-CN',{hour12:false});
-    }catch(e){
-      $('srcLondon').textContent = t('srcUnavailable');
     }
-
-    // Both SGE and London prices converted to HKD/g for quick cross-reference
-    const sgeHkd = sgePriceGlobal !== null ? fromCnyAmount(sgePriceGlobal, 'HKD') : null;
-    $('priceSgeHkd').textContent = sgeHkd !== null ? ('HK$' + fmtNum(sgeHkd, 2)) : '--';
-    const londonHkd = londonCnyGlobal !== null ? fromCnyAmount(londonCnyGlobal, 'HKD') : null;
-    $('priceLondonHkd').textContent = londonHkd !== null ? ('HK$' + fmtNum(londonHkd, 2)) : '--';
 
     // CTF HK — 极速数据（需配置 APPKEY）。首页不再单独展示卡片，这里只是静默更新
     // ctfHkPriceGlobal 供销售管理"周大福HK金价"计价模式使用。
@@ -2859,10 +2869,12 @@
     applyLang(currentLang);
     refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); });
     setInterval(() => { refreshHomePrices().then(() => { renderHomeKpisAndChart(); renderFinance(); renderReports(); renderPriceWarning(); renderRecycleWarning(); }); }, 20000);
-    // SGE (上交所金价) is real-time-ish and worth refreshing much faster than everything
-    // else — its own lightweight loop, independent of the 20s cycle above.
+    // SGE (上交所金价) and 伦敦金 are both real-time-ish and worth refreshing much faster
+    // than everything else — their own lightweight loops, independent of the 20s cycle above.
     refreshSgePrice();
     setInterval(refreshSgePrice, 5000);
+    refreshLondonPrice();
+    setInterval(refreshLondonPrice, 5000);
     // Periodically refresh shared data from the database so changes made by
     // teammates on other devices eventually show up here too.
     setInterval(async () => {
